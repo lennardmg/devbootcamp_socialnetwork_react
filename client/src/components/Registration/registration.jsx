@@ -6,7 +6,7 @@ export default class Registration extends React.Component {
     constructor() {
         super();
         this.state = {
-            message: "no message",
+            message: "",
             wasSent: false,
         };
 
@@ -18,8 +18,12 @@ export default class Registration extends React.Component {
 
         e.preventDefault();
 
-        console.log("e in handleClick: ", e);
-        alert("CLICK HAS HAPPENED!");
+        const form = document.querySelector("form");
+
+        const firstname = form.querySelector("#firstname").value;
+        const lastname = form.querySelector("#lastname").value;
+        const email = form.querySelector("#lastname").value;
+        const password = form.querySelector("#lastname").value;
 
         this.setState({
             message: "Done!",
@@ -28,20 +32,61 @@ export default class Registration extends React.Component {
         //grab values
         // fetch request server
         // send JSON data
+
+
+        fetch("/registration", {
+            method: "post",
+            headers: {
+                "content-type": "application/json",
+            },
+            body: JSON.stringify({
+                firstname,
+                lastname,
+                email,
+                password
+            }),
+        })
+            .then((res) => res.json())
+            .then((data) => {
+
+                console.log("data received from server: ", data);
+
+                location.reload();
+    
+            });
     }
 
     
     render() {
         return (
             <>
-                <h1> This is my registration component: </h1>
-                <h2> hihihihihihi </h2>
+                <h2> Please snack-ister here: </h2>
 
-                <form action="">
-                    <label htmlFor="email" className=""></label>
-                    <input type="email" name="email" id="" />
+                <form action="" className="registrationForm">
+                    <div>
+                        <label htmlFor="firstname" className=""> First Name </label>
+                        <input type="text" name="firstname" id="firstname" />
+                    </div>
 
-                    <button onClick={this.submitForm}> register </button>
+                    <div>
+                        <label htmlFor="lastname" className=""> Last Name </label>
+                        <input type="text" name="lastname" id="lastname" />
+                    </div>
+
+                    <div>
+                        <label htmlFor="email" className=""> Email </label>
+                        <input type="email" name="email" id="email" />
+                    </div>
+
+                    <div>
+                        <label htmlFor="password" className=""> Password </label>
+                        <input type="password" name="password" id="password" />
+                    </div>
+
+                    <div>
+                        <button onClick={this.submitForm}> Snack-ister </button>
+                    </div>
+
                 </form>
 
                 <span> {this.state.message} </span>
