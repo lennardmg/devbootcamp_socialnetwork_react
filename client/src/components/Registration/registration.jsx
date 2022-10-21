@@ -1,13 +1,14 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 export default class Registration extends React.Component {
-
 
     constructor() {
         super();
         this.state = {
             message: "",
             wasSent: false,
+
         };
 
         this.submitForm = this.submitForm.bind(this);
@@ -22,17 +23,13 @@ export default class Registration extends React.Component {
 
         const firstname = form.querySelector("#firstname").value;
         const lastname = form.querySelector("#lastname").value;
-        const email = form.querySelector("#lastname").value;
-        const password = form.querySelector("#lastname").value;
+        const email = form.querySelector("#email").value;
+        const password = form.querySelector("#password").value;
 
         this.setState({
             message: "Done!",
             wasSent: true,
         });
-        //grab values
-        // fetch request server
-        // send JSON data
-
 
         fetch("/registration", {
             method: "post",
@@ -49,10 +46,12 @@ export default class Registration extends React.Component {
             .then((res) => res.json())
             .then((data) => {
 
+                // check for userId, if so: location reload, with logo this time
+                // if no, this.setState error message
                 console.log("data received from server: ", data);
 
                 location.reload();
-    
+
             });
     }
 
@@ -60,37 +59,49 @@ export default class Registration extends React.Component {
     render() {
         return (
             <>
-                <h2> Please snack-ister here: </h2>
+                <h2>Please snack-ister here:</h2>
 
-                <form action="" className="registrationForm">
+                <form action="" className="inputForm">
                     <div>
-                        <label htmlFor="firstname" className=""> First Name </label>
+                        <label htmlFor="firstname" className="">
+                            First Name
+                        </label>
                         <input type="text" name="firstname" id="firstname" />
                     </div>
 
                     <div>
-                        <label htmlFor="lastname" className=""> Last Name </label>
+                        <label htmlFor="lastname" className="">
+                            Last Name
+                        </label>
                         <input type="text" name="lastname" id="lastname" />
                     </div>
 
                     <div>
-                        <label htmlFor="email" className=""> Email </label>
+                        <label htmlFor="email" className="">
+                            Email
+                        </label>
                         <input type="email" name="email" id="email" />
                     </div>
 
                     <div>
-                        <label htmlFor="password" className=""> Password </label>
+                        <label htmlFor="password" className="">
+                            Password
+                        </label>
                         <input type="password" name="password" id="password" />
                     </div>
 
                     <div>
-                        <button onClick={this.submitForm}> Snack-ister </button>
+                        <button onClick={this.submitForm}>Snack-ister</button>
                     </div>
 
+                    <p>
+                        Already signed-in? Log-in
+                        {/* <a href="#"> HERE </a> */}
+                        <Link to="/login"> HERE </Link>
+                    </p>
                 </form>
 
-                <span> {this.state.message} </span>
-                <span> {this.state.wasSent} </span>
+                <span style={{color: "red"}}>{this.state.message}</span>
             </>
         );
     }

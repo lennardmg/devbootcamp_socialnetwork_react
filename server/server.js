@@ -6,8 +6,8 @@ require("dotenv").config();
 const cookieSession = require("cookie-session");
 const bcrypt = require("bcryptjs");
 app.use(express.json());
-
 app.use(compression());
+const cryptoRandomString = require('crypto-random-string');
 
 app.use(express.static(path.join(__dirname, "..", "client", "public")));
 
@@ -19,27 +19,32 @@ app.use(
     })
 );
 
-const { insertUser } = require("../db.js");
-// const { authenticate } = require("../functions.js");
+const { insertUser, findUserByEmail } = require("../db.js");
+const { authenticate } = require("../functions.js");
+
+app.use((req, res, next) => {
+    console.log("---------------------");
+    console.log("req.url:", req.url);
+    console.log("req.method:", req.method);
+    console.log("req.session:", req.session);
+    console.log("req.body:", req.body);
+    console.log("---------------------");
+    next();
+});
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-app.get("*", function (req, res) {
-    res.sendFile(path.join(__dirname, "..", "client", "index.html"));
+app.get("/user/id", function (req, res) {
+    res.json({
+        userId: req.session.userId,
+    });
 });
 
-
-
-// still need to insert req & res again
 app.post("/registration", (req, res) => {
-
-    // console.log("req.body in post /registration: ", req.body);
-
     const firstname = req.body.firstname;
     const lastname = req.body.lastname;
     const email = req.body.email;
     const password = req.body.password;
-
 
     function hashing() {
         let hashedPassword = "";
@@ -53,27 +58,136 @@ app.post("/registration", (req, res) => {
                 hashedPassword = hash;
             })
             .then(() => {
-
                 insertUser(firstname, lastname, email, hashedPassword)
-                    .then(() => {
+                    .then((userData) => {
+                        req.session.userId = userData[0].id;
                         res.json({
                             success: true,
+                            message: "Registration successful",
                         });
                     })
                     .catch((err) => {
-                        console.log("error in insertUser with POST /registration ", err);
+                        console.log(
+                            "error in insertUser with POST /registration ",
+                            err
+                        );
+                        res.json({
+                            success: false,
+                            message: "Error",
+                        });
                     });
             })
             .catch((err) => {
-                console.log("error in hashing function with POST /registration ", err);
+                console.log(
+                    "error in hashing function with POST /registration ",
+                    err
+                );
             });
     }
     hashing();
+});
+
+app.post("/login", (req, res) => {
+
+    console.log("req.body in post /login: ", req.body);
+
+    const email = req.body.email;
+    const password = req.body.password;
+
+    findUserByEmail(email)
+        .then((user) => {
+            if (!user.length) {
+                res.json({
+                    success: false,
+                    message: "Sorry, something went wrong...",
+                });
+                return false;
+            }
+
+            const userInfo = user[0];
+            console.log("user data: ", user);
+
+            authenticate(password, user[0].password)
+                .then((result) => {
+                    if (result == true) {
+                        req.session.userId = userInfo.id;
+                        res.json({
+                            success: true,
+                            message: "LogIn successful",
+                        });
+                    }
+                    res.json({
+                        success: false,
+                        message: "Sorry, something went wrong...",
+                    });
+                })
+
+                .catch((err) => {
+                    console.log(
+                        "error in authentication inside POST /login ",
+                        err
+                    );
+                    res.json({
+                        success: false,
+                        message: "Sorry, something went wrong...",
+                    });
+                });
+        })
+        .catch((error) => {
+            console.log("error in findUserByEmail function", error);
+            res.json({
+                success: false,
+                message: "Sorry, something went wrong...",
+            });
+        });
+});
+
+
+app.post("/resetpassword", (req, res) => {
+
+    const email = req.body.email;
+
+    findUserByEmail(email)
+        .then((user) => {
+            if (!user.length) {
+                res.json({
+                    success: false,
+                    message: "Please enter a valid and registered Email address.",
+                });
+                return false;
+            }
+
+            const userInfo = user[0];
+            const secretCode = cryptoRandomString({
+                length: 6
+            });
+
+            console.log("secretCode in findUserByEmail: ", secretCode);
+
+            res.json({
+                success: true,
+                userInfo: userInfo,
+                message: "Email found, just a sec ..."
+            });
+
+        })
+        .catch((error) => {
+            console.log("error in findUserByEmail function", error);
+            res.json({
+                success: false,
+                message: "Sorry, something went wrong...",
+            });
+        });
+
 
 });
 
 
 
+/////////////////////////////////////////////////////////////////////////////////////
+app.get("*", function (req, res) {
+    res.sendFile(path.join(__dirname, "..", "client", "index.html"));
+});
 
 app.listen(process.env.PORT || 3001, function () {
     console.log("I'm listening.");
