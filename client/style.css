@@ -5,3 +5,32 @@ body {
 h1, h2, h3 {
     text-align: center;
 }
+
+.inputForm {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    margin: 5px;
+    border: solid 1px black;
+    border-radius: 5px;
+}
+
+.inputForm label {
+    position: relative;
+    left: 0;
+    width: 100px;
+    margin: 5px;
+    text-align: left;
+ 
+}
+
+.inputForm input {
+    margin: 5px;
+}
+
+.inputForm div {
+    width: 220px;
+    border-radius: 5px;
+}

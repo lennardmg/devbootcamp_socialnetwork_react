@@ -19,7 +19,7 @@ app.use(
     })
 );
 
-const { insertUser, findUserByEmail } = require("../db.js");
+const { insertUser, findUserByEmail, storePwResetCode, resetPassword } = require("../db.js");
 const { authenticate } = require("../functions.js");
 
 app.use((req, res, next) => {
@@ -143,7 +143,7 @@ app.post("/login", (req, res) => {
 });
 
 
-app.post("/resetpassword", (req, res) => {
+app.post("/checkemail", (req, res) => {
 
     const email = req.body.email;
 
@@ -152,23 +152,81 @@ app.post("/resetpassword", (req, res) => {
             if (!user.length) {
                 res.json({
                     success: false,
-                    message: "Please enter a valid and registered Email address.",
+                    message:
+                        "Please enter a valid and registered Email address.",
                 });
                 return false;
             }
 
             const userInfo = user[0];
             const secretCode = cryptoRandomString({
-                length: 6
+                length: 6,
             });
 
             console.log("secretCode in findUserByEmail: ", secretCode);
 
-            res.json({
-                success: true,
-                userInfo: userInfo,
-                message: "Email found, just a sec ..."
+            storePwResetCode(email, secretCode).then(() => {
+                res.json({
+                    success: true,
+                    userInfo: userInfo,
+                    message: "Email found, just a sec ...",
+                });
             });
+        })
+        .catch((error) => {
+            console.log("error in findUserByEmail function", error);
+            res.json({
+                success: false,
+                message: "Sorry, something went wrong...",
+            });
+        });
+});
+
+
+
+app.post("/resetpassword", (req, res) => {
+
+    const email = req.body.email;
+    const code = req.body.code;
+    const newPassword = req.body.password;
+
+    findUserByEmail(email)
+        .then((user) => {
+
+            const userInfo = user[0];
+
+            console.log("userInfo in findUserByEmail: ", userInfo);
+            console.log("code: ", code);
+
+            if (userInfo.code == code) {
+
+                function hashing() {
+
+                    bcrypt
+                        .genSalt()
+                        .then((salt) => {
+                            return bcrypt.hash(newPassword, salt);
+                        })
+                        .then((hash) => {
+  
+                            resetPassword(email, hash).then(() => {
+                                res.json({
+                                    success: true,
+                                    message: "Code approved, updating password ...",
+                                });
+                            });
+                        })
+                        .catch((err) => {
+                            console.log(
+                                "error in hashing function with POST /resetpassword ",
+                                err
+                            );
+                        });
+                }
+
+                hashing();
+                 
+            }
 
         })
         .catch((error) => {
@@ -178,9 +236,21 @@ app.post("/resetpassword", (req, res) => {
                 message: "Sorry, something went wrong...",
             });
         });
+});
 
+
+
+app.get("/getInfoAboutSignedInUser", (req, res) => {
 
 });
+
+
+
+
+app.post("/updateProfilePicture", (req, res) => {
+
+});
+
 
 
 

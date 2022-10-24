@@ -1,9 +1,6 @@
 import ReactDOM from "react-dom";
 import Welcome from "./components/Welcome/welcome.jsx";
 
-
-// fetch checking for data.userId, if yes: render LOGO
-// if no: render WELCOME
 fetch("/user/id")
     .then((response) => response.json())
     .then((data) => {
