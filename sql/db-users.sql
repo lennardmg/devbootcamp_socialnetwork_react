@@ -9,5 +9,6 @@ CREATE TABLE users (
     password VARCHAR(255) NOT NULL,
     code VARCHAR(255),
     profile_pic_url VARCHAR(255),
+    bio TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

@@ -56,53 +56,58 @@ export default class Login extends React.Component {
     render() {
         return (
             <>
-                <h2> Please Log-in here: </h2>
+                <h2> Please Log-in </h2>
+                <div className="inputFlex">
+                    <form action="" className="inputForm">
+                        <div>
+                            <label htmlFor="email" className="">
+                                Email
+                            </label>
+                            <input
+                                type="email"
+                                name="email"
+                                id="email"
+                                //value={this.state.email}
+                                onChange={this.handleChange}
+                            />
+                        </div>
 
-                <form action="" className="inputForm">
-                    <div>
-                        <label htmlFor="email" className="">
-                            Email
-                        </label>
-                        <input
-                            type="email"
-                            name="email"
-                            id="email"
-                            //value={this.state.email}
-                            onChange={this.handleChange}
-                        />
-                    </div>
+                        <div>
+                            <label htmlFor="password" className="">
+                                Password
+                            </label>
+                            <input
+                                type="password"
+                                name="password"
+                                id="password"
+                                //value={this.state.password}
+                                onChange={this.handleChange}
+                            />
+                        </div>
 
-                    <div>
-                        <label htmlFor="password" className="">
-                            Password
-                        </label>
-                        <input
-                            type="password"
-                            name="password"
-                            id="password"
-                            //value={this.state.password}
-                            onChange={this.handleChange}
-                        />
-                    </div>
+                        <span style={{ color: "red" }}>
+                            {this.state.message}
+                        </span>
 
-                    <span style={{ color: "red" }}>{this.state.message}</span>
+                        <div>
+                            <button onClick={this.submitLoginForm}>
+                                Log-In
+                            </button>
+                        </div>
 
-                    <div>
-                        <button onClick={this.submitLoginForm}>Log-In</button>
-                    </div>
+                        <p>
+                            Not yet snack-istered? Sign-up &nbsp;
+                            {/* <a href="#"> HERE </a> */}
+                            <Link to="/">HERE</Link>
+                        </p>
 
-                    <p>
-                        Not yet snack-istered? Sign-up
-                        {/* <a href="#"> HERE </a> */}
-                        <Link to="/">HERE</Link>
-                    </p>
-
-                    <p>
-                        Forgot your password? Reset it
-                        {/* <a href="#"> HERE </a> */}
-                        <Link to="/resetpassword">HERE</Link>
-                    </p>
-                </form>
+                        <p>
+                            Forgot your password? Reset it &nbsp;
+                            {/* <a href="#"> HERE </a> */}
+                            <Link to="/resetpassword">HERE</Link>
+                        </p>
+                    </form>
+                </div>
             </>
         );
     }

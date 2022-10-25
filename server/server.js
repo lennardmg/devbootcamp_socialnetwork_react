@@ -19,7 +19,7 @@ app.use(
     })
 );
 
-const { insertUser, findUserByEmail, storePwResetCode, resetPassword } = require("../db.js");
+const { insertUser, findUserByEmail, storePwResetCode, resetPassword, getUserInfo } = require("../db.js");
 const { authenticate } = require("../functions.js");
 
 app.use((req, res, next) => {
@@ -242,14 +242,44 @@ app.post("/resetpassword", (req, res) => {
 
 app.get("/getInfoAboutSignedInUser", (req, res) => {
 
-});
+    getUserInfo(req.session.userId)
+        .then((user) => {
 
+            const userInfo = user[0];
+
+            console.log("user in getUserInfo: ", user);
+            console.log("userInfo in getUserInfo: ", userInfo);
+
+            res.json({
+                success: true,
+                user: userInfo,
+            });
+
+        })
+        .catch((error) => {
+            console.log("error in getUserInfo function", error);
+            res.json({
+                success: false,
+                message: "Sorry, something went wrong...",
+            });
+        });
+
+});
 
 
 
 app.post("/updateProfilePicture", (req, res) => {
 
 });
+
+
+
+app.post("/updateBio", (req, res) => {
+
+
+});
+
+
 
 
 

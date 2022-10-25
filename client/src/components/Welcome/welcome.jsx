@@ -12,18 +12,18 @@ export default class Welcome extends React.Component {
         return (
             <>
                 <h1> 🍭 Welcome to Snack Lovers! 🥜</h1>
-                <h2>
+                <h3>
                     <img
                         src="https://www.giftbasketbounty.com/files/1327644/uploaded/Snackdown_819332.jpg"
                         alt="Snack Lovers Logo"
                         style={{ height: "150px", width: "150px" }}
                     />
-                </h2>
-                <h2> Do you love snacks as much as we do? </h2>
-                <h2> If so, you have come to the right place!</h2>
-                <h2>
+                </h3>
+                <h3> Do you love snacks as much as we do? </h3>
+                <h3> If so, you have come to the right place!</h3>
+                <h3>
                     Register and join our community of fellow snack lovers ⤵️
-                </h2>
+                </h3>
                 <hr />
                 <BrowserRouter>
                     <Route exact path="/">

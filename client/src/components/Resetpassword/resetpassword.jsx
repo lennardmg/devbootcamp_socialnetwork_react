@@ -92,33 +92,41 @@ export default class Resetpassword extends React.Component {
                             return (
                                 <>
                                     <h3>
-                                        Please enter the Email with which you registered
-                                        your account:
+                                        Please enter the Email with which you
+                                        registered your account:
                                     </h3>
+                                    <div className="inputFlex">
+                                        <form action="" className="inputForm">
+                                            <div>
+                                                <label
+                                                    htmlFor="email"
+                                                    className=""
+                                                >
+                                                    Your Email
+                                                </label>
+                                                <input
+                                                    type="email"
+                                                    name="email"
+                                                    id="email"
+                                                    onChange={this.handleChange}
+                                                />
+                                            </div>
 
-                                    <form action="" className="inputForm">
-                                        <div>
-                                            <label htmlFor="email" className="">
-                                                Your Email
-                                            </label>
-                                            <input
-                                                type="email"
-                                                name="email"
-                                                id="email"
-                                                onChange={this.handleChange}
-                                            />
-                                        </div>
+                                            <span style={{ color: "red" }}>
+                                                {this.state.message}
+                                            </span>
 
-                                        <span style={{ color: "red" }}>
-                                            {this.state.message}
-                                        </span>
-
-                                        <div>
-                                            <button onClick={this.submitEmailForm}>
-                                                Send
-                                            </button>
-                                        </div>
-                                    </form>
+                                            <div>
+                                                <button
+                                                    onClick={
+                                                        this.submitEmailForm
+                                                    }
+                                                >
+                                                    Send
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
                                 </>
                             );
 
@@ -127,45 +135,57 @@ export default class Resetpassword extends React.Component {
                                 //code
                                 <>
                                     <h3>
-                                        Please enter the varifaction code that we sent you
-                                        via mail and your new password:
+                                        Please enter the varifaction code that
+                                        we sent you via mail and your new
+                                        password:
                                     </h3>
+                                    <div className="inputFlex">
+                                        <form action="" className="inputForm">
+                                            <div>
+                                                <label
+                                                    htmlFor="code"
+                                                    className=""
+                                                >
+                                                    Varification Code
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    name="code"
+                                                    id="code"
+                                                    onChange={this.handleChange}
+                                                />
+                                            </div>
 
-                                    <form action="" className="inputForm">
-                                        <div>
-                                            <label htmlFor="code" className="">
-                                                Varification Code
-                                            </label>
-                                            <input
-                                                type="text"
-                                                name="code"
-                                                id="code"
-                                                onChange={this.handleChange}
-                                            />
-                                        </div>
+                                            <div>
+                                                <label
+                                                    htmlFor="password"
+                                                    className=""
+                                                >
+                                                    Choose a new password
+                                                </label>
+                                                <input
+                                                    type="password"
+                                                    name="password"
+                                                    id="password"
+                                                    onChange={this.handleChange}
+                                                />
+                                            </div>
 
-                                        <div>
-                                            <label htmlFor="password" className="">
-                                                Choose a new password
-                                            </label>
-                                            <input
-                                                type="password"
-                                                name="password"
-                                                id="password"
-                                                onChange={this.handleChange}
-                                            />
-                                        </div>
+                                            <span style={{ color: "red" }}>
+                                                {this.state.message}
+                                            </span>
 
-                                        <span style={{ color: "red" }}>
-                                            {this.state.message}
-                                        </span>
-
-                                        <div>
-                                            <button onClick={this.submitResetForm}>
-                                                Change
-                                            </button>
-                                        </div>
-                                    </form>
+                                            <div>
+                                                <button
+                                                    onClick={
+                                                        this.submitResetForm
+                                                    }
+                                                >
+                                                    Change
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
                                 </>
                             );
                         case 3:

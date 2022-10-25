@@ -61,45 +61,47 @@ export default class Registration extends React.Component {
             <>
                 <h2>Please snack-ister here:</h2>
 
-                <form action="" className="inputForm">
-                    <div>
-                        <label htmlFor="firstname" className="">
-                            First Name
-                        </label>
-                        <input type="text" name="firstname" id="firstname" />
-                    </div>
+                <div className="inputFlex">
+                    <form action="" className="inputForm">
+                        <div>
+                            <label htmlFor="firstname" className="">
+                                First Name
+                            </label>
+                            <input type="text" name="firstname" id="firstname" />
+                        </div>
 
-                    <div>
-                        <label htmlFor="lastname" className="">
-                            Last Name
-                        </label>
-                        <input type="text" name="lastname" id="lastname" />
-                    </div>
+                        <div>
+                            <label htmlFor="lastname" className="">
+                                Last Name
+                            </label>
+                            <input type="text" name="lastname" id="lastname" />
+                        </div>
 
-                    <div>
-                        <label htmlFor="email" className="">
-                            Email
-                        </label>
-                        <input type="email" name="email" id="email" />
-                    </div>
+                        <div>
+                            <label htmlFor="email" className="">
+                                Email
+                            </label>
+                            <input type="email" name="email" id="email" />
+                        </div>
 
-                    <div>
-                        <label htmlFor="password" className="">
-                            Password
-                        </label>
-                        <input type="password" name="password" id="password" />
-                    </div>
+                        <div>
+                            <label htmlFor="password" className="">
+                                Password
+                            </label>
+                            <input type="password" name="password" id="password" />
+                        </div>
 
-                    <div>
-                        <button onClick={this.submitForm}>Snack-ister</button>
-                    </div>
+                        <div>
+                            <button onClick={this.submitForm}>Snack-ister</button>
+                        </div>
 
-                    <p>
-                        Already signed-in? Log-in
-                        {/* <a href="#"> HERE </a> */}
-                        <Link to="/login"> HERE </Link>
-                    </p>
-                </form>
+                        <p>
+                            Already signed-in? Log-in &nbsp;
+                            {/* <a href="#"> HERE </a> */}
+                            <Link to="/login">HERE </Link>
+                        </p>
+                    </form>
+                </div>
 
                 <span style={{color: "red"}}>{this.state.message}</span>
             </>

@@ -1,9 +1,21 @@
+* {
+    margin: 0;
+    box-sizing: border-box;
+}
+
 body {
     background-color: whitesmoke;
 }
 
 h1, h2, h3 {
     text-align: center;
+    margin: 5px;
+}
+
+.inputFlex {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
 }
 
 .inputForm {
@@ -12,9 +24,11 @@ h1, h2, h3 {
     justify-content: center;
     align-content: center;
     align-items: center;
-    margin: 5px;
+    margin: 10px;
     border: solid 1px black;
     border-radius: 5px;
+    padding: 10px;
+    box-shadow: 1px 2px 3px 4px rgba(47, 45, 45, 0.4);
 }
 
 .inputForm label {
@@ -33,4 +47,38 @@ h1, h2, h3 {
 .inputForm div {
     width: 220px;
     border-radius: 5px;
+}
+
+.inputForm button {
+    margin: 5px;
+    border-radius: 10px;
+    cursor: pointer;
+    min-width: 80px;
+    height: 40px;
+    transition: .5s;
+    transform: scale(.9);
+}
+
+.inputForm button:hover::before {
+  transform: scale(1.1);
+  box-shadow: 0 0 15px #ff1010;
+}
+
+.inputForm button:hover {
+  color: #1024ff;
+  box-shadow: 0 0 5px #ff1030;
+  text-shadow: 0 0 5px #ff1054;
+}
+
+.appHeader {
+    display: flex;
+    flex-direction: row;
+    justify-content:space-between;
+    padding: 5px;
+}
+
+.profile {
+    margin: 5px;
+    border: 1px solid black;
+    padding: 5px;
 }

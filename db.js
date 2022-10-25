@@ -31,6 +31,17 @@ module.exports.findUserByEmail = function (email) {
 };
 
 
+module.exports.getUserInfo = function (id) {
+    const sql = `
+        SELECT * FROM users WHERE id= $1;
+    `;
+    return db.query(sql, [id]).then((result) => {
+        return result.rows;
+    });
+};
+
+
+
 module.exports.storePwResetCode = function (email, code) {
     const sql = `
         UPDATE users SET code = $2 
