@@ -41,6 +41,29 @@ module.exports.getUserInfo = function (id) {
 };
 
 
+module.exports.getUsersWhoRecentlyJoined = function () {
+    const sql = `
+        SELECT * FROM users 
+        ORDER BY id DESC 
+        LIMIT 3;
+    `;
+    return db.query(sql).then((result) => {
+        return result.rows;
+    });
+};
+
+module.exports.searchUsers = function (searchInput) {
+    const sql = `
+        SELECT id, first_name, last_name, profile_pic_url FROM users 
+        WHERE first_name ILIKE $1;
+    `;
+    return db.query(sql, [searchInput + "%"]).then((result) => {
+        return result.rows;
+    });
+};
+
+
+
 
 module.exports.storePwResetCode = function (email, code) {
     const sql = `

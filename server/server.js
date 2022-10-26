@@ -19,7 +19,16 @@ app.use(
     })
 );
 
-const { insertUser, findUserByEmail, storePwResetCode, resetPassword, getUserInfo } = require("../db.js");
+const {
+    insertUser,
+    findUserByEmail,
+    storePwResetCode,
+    resetPassword,
+    getUserInfo,
+    getUsersWhoRecentlyJoined,
+    searchUsers,
+} = require("../db.js");
+
 const { authenticate } = require("../functions.js");
 
 app.use((req, res, next) => {
@@ -39,6 +48,7 @@ app.get("/user/id", function (req, res) {
         userId: req.session.userId,
     });
 });
+
 
 app.post("/registration", (req, res) => {
     const firstname = req.body.firstname;
@@ -280,7 +290,52 @@ app.post("/updateBio", (req, res) => {
 });
 
 
+///////////////////// Finding people (Part 6) /////////////////////////
 
+app.get("/getUsersWhoRecentlyJoined", (req, res) => {
+
+    getUsersWhoRecentlyJoined()
+        .then((latestUsers) => {
+
+            console.log(
+                "latestUsers in /getUsersWhoRecentlyJoined: ",
+                latestUsers
+            );
+
+            res.json({
+                success: true,
+                latestUsers: latestUsers,
+            });
+        })
+        .catch((error) => {
+            console.log("error in getUsersWhoRecentlyJoined function", error);
+        });
+});
+
+
+app.get("/searchUsers", (req, res) => {
+
+    console.log("req.query in /searchUsers: ", req.query);
+
+    searchUsers(req.query.q)
+        .then((foundUsers) => {
+            console.log(
+                "foundUsers in /searchUsers: ",
+                foundUsers
+            );
+
+            res.json({
+                success: true,
+                foundUsers: foundUsers,
+            });
+        })
+        .catch((error) => {
+            console.log("error in searchUsers function", error);
+        });
+});
+
+
+///////////////////////////////////////////////////////////////////////
 
 
 

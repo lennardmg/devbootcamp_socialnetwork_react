@@ -18,21 +18,27 @@ export default class BioEditor extends React.Component {
         this.updateBio = this.updateBio.bind(this);
     }
     
-    componentDidMount() {
+    // componentDidMount() {
         
-        if (
-            this.state.bio == "" ||
-            this.state.bio == null ||
-            this.state.bio == undefined
-        ) {
-            let doesBioExist = false;
-        } 
-        let doesBioExist = true;
+    //     if (
+    //         this.state.bio == "" ||
+    //         this.state.bio == null ||
+    //         this.state.bio == undefined
+    //     ) {
+    //         let doesBioExist = false;
+    //     } 
+    //     let doesBioExist = true;
 
-    }
+    // }
 
     toggleEditMode() {
         
+    }
+
+    updateBio() {
+
+        let newBio = "";
+
     }
 
     render() {
@@ -55,7 +61,8 @@ export default class BioEditor extends React.Component {
                 {/* if doesBioExist == true && isBioBeingUpdated == false*/}
 
                 <p>{this.state.bio}</p> 
-                <button onClick=""> Edit Bio </button>
+                {/* onClick still missing */}
+                <button> Edit Bio </button>
 
 
                 {/* if doesBioExist == true && isBioBeingUpdated == true */}

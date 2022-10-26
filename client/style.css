@@ -7,7 +7,7 @@ body {
     background-color: whitesmoke;
 }
 
-h1, h2, h3 {
+h1, h2, h3, h4 {
     text-align: center;
     margin: 5px;
 }
@@ -81,4 +81,26 @@ h1, h2, h3 {
     margin: 5px;
     border: 1px solid black;
     padding: 5px;
+}
+
+.userResultTable {
+    list-style-type: none;
+}
+
+.userCard {
+    display: flex;
+    flex-direction: row;
+    justify-content:first baseline;
+}
+
+.userCard p {
+    position: relative;
+    top: 10%;
+    font-size: 25px;
+}
+
+.userCard img {
+    border: solid black 1px;
+    margin: 5px;    
+    border-radius: 5px;
 }

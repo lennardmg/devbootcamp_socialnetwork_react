@@ -1,8 +1,12 @@
 import { Component } from "react";
+import { BrowserRouter, Route } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Profile from "../Profile/profile.jsx";
 import ProfilePic from "../Profile/profilepic.jsx";
 import Logo from "../App/logo.jsx";
 // import Uploader from "../Profile/uploader.jsx";
+import SearchInput from "../SearchInput/searchinput.jsx";
+import FindPeople from "../SearchInput/findpeople.jsx";
 
 
 export default class App extends Component {
@@ -83,14 +87,24 @@ export default class App extends Component {
 
                 <h1>Welcome to Snack-Lovers!</h1>
 
-                <Profile
-                    profile_pic_url={this.state.profile_pic_url}
-                    togglePopup={this.togglePopup}
-                    first_name={this.state.first_name}
-                    last_name={this.state.last_name}
-                    bio={this.state.bio}
-                    updateBio={this.updateBio}
-                />
+                <BrowserRouter>
+                    <Route exact path="/">
+                        <Profile
+                            profile_pic_url={this.state.profile_pic_url}
+                            togglePopup={this.togglePopup}
+                            first_name={this.state.first_name}
+                            last_name={this.state.last_name}
+                            bio={this.state.bio}
+                            updateBio={this.updateBio}
+                        />
+                    </Route>
+
+                    <Route path="/users">
+                        <FindPeople />
+                    </Route>
+                </BrowserRouter>
+
+                <hr />
             </>
         );
     }
