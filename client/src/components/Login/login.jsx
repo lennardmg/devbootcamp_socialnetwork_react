@@ -1,8 +1,8 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 // import { BrowserRouter, Route } from "react-router-dom";
 
-export default class Login extends React.Component {
+class Login extends React.Component {
 
     constructor() {
         super();
@@ -18,29 +18,41 @@ export default class Login extends React.Component {
     submitLoginForm(e) {
         e.preventDefault();
 
-        const checkUser = {
-            email: this.state.email,
-            password: this.state.password,
-        };
-
-        fetch("/login", {
-            method: "post",
-            headers: {
-                "content-type": "application/json",
-            },
-            body: JSON.stringify(checkUser),
-        })
-            .then((res) => res.json())
-            .then((data) => {
-                // console.log("data received from server: ", data);
-
-                this.setState({
-                    message: data.message,
-                });
-
-                location.reload();
-
+        // the empty string needs to be checked as well, in case you enter something into the input
+        // field but then delete it again => state property would have been created, but is now empty
+        if (this.state.email == undefined || this.state.email == "") {
+            this.setState({
+                message: "*Please enter an email adress",
             });
+        } else if (this.state.password == undefined || this.state.password == "") {
+            this.setState({
+                message: "*Please enter a password",
+            });
+        } else {
+            const checkUser = {
+                email: this.state.email,
+                password: this.state.password,
+            };
+
+            fetch("/login", {
+                method: "post",
+                headers: {
+                    "content-type": "application/json",
+                },
+                body: JSON.stringify(checkUser),
+            })
+                .then((res) => res.json())
+                .then((data) => {
+                    // console.log("data received from server: ", data);
+
+                    this.setState({
+                        message: data.message,
+                    });
+
+                    this.props.history.push("/profile");
+                    location.reload();
+                });
+        }
     }
 
     handleChange(event) {
@@ -59,6 +71,11 @@ export default class Login extends React.Component {
                 <h2> Please Log-in </h2>
                 <div className="inputFlex">
                     <form action="" className="inputForm">
+
+                        <span style={{ color: "red" }}>
+                            {this.state.message}
+                        </span>
+                        
                         <div>
                             <label htmlFor="email" className="">
                                 Email
@@ -67,6 +84,7 @@ export default class Login extends React.Component {
                                 type="email"
                                 name="email"
                                 id="email"
+                                required
                                 //value={this.state.email}
                                 onChange={this.handleChange}
                             />
@@ -80,14 +98,11 @@ export default class Login extends React.Component {
                                 type="password"
                                 name="password"
                                 id="password"
+                                required
                                 //value={this.state.password}
                                 onChange={this.handleChange}
                             />
                         </div>
-
-                        <span style={{ color: "red" }}>
-                            {this.state.message}
-                        </span>
 
                         <div>
                             <button onClick={this.submitLoginForm}>
@@ -112,3 +127,5 @@ export default class Login extends React.Component {
         );
     }
 }
+
+export default withRouter(Login);

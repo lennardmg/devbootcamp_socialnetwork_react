@@ -1,61 +1,81 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 
-export default class Registration extends React.Component {
-
+class Registration extends React.Component {
     constructor() {
         super();
         this.state = {
             message: "",
             wasSent: false,
-
         };
 
         this.submitForm = this.submitForm.bind(this);
+        this.handleChange = this.handleChange.bind(this);
     }
 
-
-    submitForm(e) {
-
-        e.preventDefault();
-
-        const form = document.querySelector("form");
-
-        const firstname = form.querySelector("#firstname").value;
-        const lastname = form.querySelector("#lastname").value;
-        const email = form.querySelector("#email").value;
-        const password = form.querySelector("#password").value;
+    handleChange(event) {
+        const targetName = event.target.name;
 
         this.setState({
-            message: "Done!",
-            wasSent: true,
+            [targetName]: event.target.value,
         });
-
-        fetch("/registration", {
-            method: "post",
-            headers: {
-                "content-type": "application/json",
-            },
-            body: JSON.stringify({
-                firstname,
-                lastname,
-                email,
-                password
-            }),
-        })
-            .then((res) => res.json())
-            .then((data) => {
-
-                // check for userId, if so: location reload, with logo this time
-                // if no, this.setState error message
-                console.log("data received from server: ", data);
-
-                location.reload();
-
-            });
     }
 
-    
+    submitForm(e) {
+        e.preventDefault();
+
+        if (this.state.email == undefined || this.state.email == "") {
+            this.setState({
+                message: "*Please enter an email adress",
+            });
+        } else if (
+            this.state.password == undefined ||
+            this.state.password == ""
+        ) {
+            this.setState({
+                message: "*Please enter a password",
+            });
+        } else if (
+            this.state.firstname == undefined ||
+            this.state.firstname == ""
+        ) {
+            this.setState({
+                message: "*Please enter a first name",
+            });
+        } else if (
+            this.state.lastname == undefined ||
+            this.state.lastname == ""
+        ) {
+            this.setState({
+                message: "*Please enter a last name",
+            });
+        } else {
+
+            const newUser = {
+                email: this.state.email,
+                password: this.state.password,
+                firstname: this.state.firstname,
+                lastname: this.state.lastname,
+            };
+
+            fetch("/registration", {
+                method: "post",
+                headers: {
+                    "content-type": "application/json",
+                },
+                body: JSON.stringify(newUser),
+            })
+                .then((res) => res.json())
+                .then(() => {
+
+                    // console.log("data received from server: ", data);
+
+                    this.props.history.push("/profile");
+                    location.reload();
+                });
+        }
+    }
+
     render() {
         return (
             <>
@@ -63,36 +83,61 @@ export default class Registration extends React.Component {
 
                 <div className="inputFlex">
                     <form action="" className="inputForm">
+
+                        <span style={{ color: "red" }}>{this.state.message}</span>
+
                         <div>
                             <label htmlFor="firstname" className="">
                                 First Name
                             </label>
-                            <input type="text" name="firstname" id="firstname" />
+                            <input
+                                type="text"
+                                name="firstname"
+                                id="firstname"
+                                onChange={this.handleChange}
+                            />
                         </div>
 
                         <div>
                             <label htmlFor="lastname" className="">
                                 Last Name
                             </label>
-                            <input type="text" name="lastname" id="lastname" />
+                            <input
+                                type="text"
+                                name="lastname"
+                                id="lastname"
+                                onChange={this.handleChange}
+                            />
                         </div>
 
                         <div>
                             <label htmlFor="email" className="">
                                 Email
                             </label>
-                            <input type="email" name="email" id="email" />
+                            <input
+                                type="email"
+                                name="email"
+                                id="email"
+                                onChange={this.handleChange}
+                            />
                         </div>
 
                         <div>
                             <label htmlFor="password" className="">
                                 Password
                             </label>
-                            <input type="password" name="password" id="password" />
+                            <input
+                                type="password"
+                                name="password"
+                                id="password"
+                                onChange={this.handleChange}
+                            />
                         </div>
 
                         <div>
-                            <button onClick={this.submitForm}>Snack-ister</button>
+                            <button onClick={this.submitForm}>
+                                Snack-ister
+                            </button>
                         </div>
 
                         <p>
@@ -102,9 +147,9 @@ export default class Registration extends React.Component {
                         </p>
                     </form>
                 </div>
-
-                <span style={{color: "red"}}>{this.state.message}</span>
             </>
         );
     }
 }
+
+export default withRouter(Registration);

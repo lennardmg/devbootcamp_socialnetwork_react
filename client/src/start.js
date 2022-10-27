@@ -1,6 +1,7 @@
 import ReactDOM from "react-dom";
 import Welcome from "./components/Welcome/welcome.jsx";
 import App from "./components/App/app.jsx";
+import { BrowserRouter } from "react-router-dom";
 
 fetch("/user/id")
     .then((response) => response.json())
@@ -9,8 +10,18 @@ fetch("/user/id")
         // console.log("data in fetch at start.js: ", data);
 
         if (!data.userId) {
-            ReactDOM.render(<Welcome />, document.querySelector("main"));
+            ReactDOM.render(
+                <BrowserRouter>
+                    <Welcome />
+                </BrowserRouter>,
+                document.querySelector("main")
+            );
         } else {
-            ReactDOM.render(<App />, document.querySelector("main"));
+            ReactDOM.render(
+                <BrowserRouter>
+                    <App />
+                </BrowserRouter>,
+                document.querySelector("main")
+            );
         }
     });

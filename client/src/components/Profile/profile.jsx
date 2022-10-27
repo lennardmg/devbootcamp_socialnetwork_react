@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 export default function Profile(props) {
 
-    console.log("props in Profile function: ", props);
+    // console.log("props in Profile function: ", props);
 
     return (
         <>

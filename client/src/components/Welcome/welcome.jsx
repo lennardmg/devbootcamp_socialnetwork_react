@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter, Route } from "react-router-dom";
+import { Route } from "react-router-dom";
 import Registration from "../Registration/registration.jsx";
 import Login from "../Login/login.jsx";
 import Resetpassword from "../Resetpassword/resetpassword.jsx";
@@ -25,20 +25,21 @@ export default class Welcome extends React.Component {
                     Register and join our community of fellow snack lovers ⤵️
                 </h3>
                 <hr />
-                <BrowserRouter>
-                    <Route exact path="/">
-                        <Registration />
-                    </Route>
+                
+                <Route exact path="/">
+                    <Registration />
+                </Route>
 
-                    <Route path="/login">
-                        <Login />
-                    </Route>
+                <Route path="/login">
+                    <Login
+                        history={this.props.history}
+                    />
+                </Route>
 
-                    <Route path="/resetpassword">
-                        <Resetpassword />
-                    </Route>
+                <Route path="/resetpassword">
+                    <Resetpassword />
+                </Route>
 
-                </BrowserRouter>
                 <hr />
             </>
         );

@@ -8,7 +8,6 @@ const FindPeople = () => {
     const [isSearching, setIsSearching] = useState(false);
 
     useEffect(() => {
-        console.log("findpeople component did mount");
 
         fetch("/getUsersWhoRecentlyJoined", {
             method: "get",
@@ -18,7 +17,7 @@ const FindPeople = () => {
         })
             .then((res) => res.json())
             .then((data) => {
-                console.log("data received from server in useEffect from findpeople: ", data);
+                // console.log("data received from server in useEffect from findpeople: ", data);
 
                 setUsers(data.latestUsers);
 
@@ -79,7 +78,7 @@ const FindPeople = () => {
             <br />
 
             {users.length == 0 && (
-                <span style={{ fontStyle: "italic;" }}> No user found </span>
+                <span style={{ fontStyle: "italic" }}> No user found </span>
             )}
             {users.length > 0 && <FindPeopleResultList users={users} />}
 
@@ -100,7 +99,7 @@ const FindPeople = () => {
             )}
 
             <h4>
-                <Link to="/"> Your profile </Link>
+                <Link to="/profile"> Your profile </Link>
             </h4>
         </>
     );

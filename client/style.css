@@ -75,12 +75,16 @@ h1, h2, h3, h4 {
     flex-direction: row;
     justify-content:space-between;
     padding: 5px;
+    background-color: white;
 }
 
 .profile {
     margin: 5px;
     border: 1px solid black;
     padding: 5px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 5px 5px 2px grey;
 }
 
 .userResultTable {
@@ -91,16 +95,62 @@ h1, h2, h3, h4 {
     display: flex;
     flex-direction: row;
     justify-content:first baseline;
+    align-items: center;
+    cursor: pointer;
+    width: 450px;
+    border: 1px solid black;
+    background-color: white;
+    margin: 5px;
+    border-radius: 10px;
+    box-shadow: 5px 5px 2px grey;
 }
 
 .userCard p {
     position: relative;
     top: 10%;
     font-size: 25px;
+    margin-left: 15px;
 }
 
 .userCard img {
     border: solid black 1px;
     margin: 5px;    
     border-radius: 5px;
+}
+
+.logOutButton {
+    background-color: black;
+    color: white;
+    cursor: pointer;
+    margin-bottom: 2px;
+    border-radius: 5px;
+}
+
+.leftHeaderFlex {
+    display: flex;
+    flex-direction: row;
+    justify-content:first baseline;
+}
+
+.rightHeaderFlex {
+    display: flex;
+    flex-direction: column;
+    justify-content:first baseline;
+}
+
+.profileFlex {
+    display: flex;
+    flex-direction: row;
+    justify-content:first baseline;
+    align-items: center;
+}
+
+.profile img{
+   border-radius: 10px;
+   border-radius: 1px dotted black;
+}
+
+.profile p {
+    margin-left: 20px;
+    font-style: italic;
 }

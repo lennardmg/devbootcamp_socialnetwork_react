@@ -1,12 +1,12 @@
 import { Component } from "react";
-import { BrowserRouter, Route } from "react-router-dom";
-import { Link } from "react-router-dom";
+import { Route } from "react-router-dom";
 import Profile from "../Profile/profile.jsx";
 import ProfilePic from "../Profile/profilepic.jsx";
 import Logo from "../App/logo.jsx";
 // import Uploader from "../Profile/uploader.jsx";
-import SearchInput from "../SearchInput/searchinput.jsx";
 import FindPeople from "../SearchInput/findpeople.jsx";
+import LogOut from "../Login/logout.jsx";
+import OtherProfile from "../OtherProfile/otherprofile.jsx";
 
 
 export default class App extends Component {
@@ -34,17 +34,17 @@ export default class App extends Component {
         })
             .then((res) => res.json())
             .then((data) => {
-                console.log(
-                    "data.user in fetch componentDidMount: ",
-                    data.user
-                );
+                // console.log(
+                //     "data.user in fetch componentDidMount: ",
+                //     data.user
+                // );
 
                 if (data.success == true) {
                     this.setState(data.user, () => {
-                        console.log(
-                            "second this.state in componentDidMount: ",
-                            this.state
-                        );
+                        // console.log(
+                        //     "second this.state in componentDidMount: ",
+                        //     this.state
+                        // );
                     });
                 }
             });
@@ -65,16 +65,20 @@ export default class App extends Component {
         return (
             <>
                 <div className="appHeader">
-                    <Logo />
-
+                    <div className="leftHeaderFlex">
+                        <Logo />
+                        <h1>Welcome to Snack-Lovers!</h1>
+                    </div>
                     {/* in ProfilePic we trigger the togglePopup through a click event */}
-                    <ProfilePic
-                        profile_pic_url={this.state.profile_pic_url}
-                        togglePopup={this.togglePopup}
-                        first_name={this.state.first_name}
-                        last_name={this.state.last_name}
-                    />
-
+                    <div className="rightHeaderFlex">
+                        <LogOut />
+                        <ProfilePic
+                            profile_pic_url={this.state.profile_pic_url}
+                            togglePopup={this.togglePopup}
+                            first_name={this.state.first_name}
+                            last_name={this.state.last_name}
+                        />
+                    </div>
                     {/* {this.state.openPopup && (
                         <Uploader
                             setProfilePic={this.setProfilePic}
@@ -85,24 +89,24 @@ export default class App extends Component {
 
                 <hr />
 
-                <h1>Welcome to Snack-Lovers!</h1>
+                <Route path="/profile">
+                    <Profile
+                        profile_pic_url={this.state.profile_pic_url}
+                        togglePopup={this.togglePopup}
+                        first_name={this.state.first_name}
+                        last_name={this.state.last_name}
+                        bio={this.state.bio}
+                        updateBio={this.updateBio}
+                    />
+                </Route>
 
-                <BrowserRouter>
-                    <Route exact path="/">
-                        <Profile
-                            profile_pic_url={this.state.profile_pic_url}
-                            togglePopup={this.togglePopup}
-                            first_name={this.state.first_name}
-                            last_name={this.state.last_name}
-                            bio={this.state.bio}
-                            updateBio={this.updateBio}
-                        />
-                    </Route>
+                <Route exact path="/users">
+                    <FindPeople />
+                </Route>
 
-                    <Route path="/users">
-                        <FindPeople />
-                    </Route>
-                </BrowserRouter>
+                <Route path="/users/:id">
+                    <OtherProfile />
+                </Route>
 
                 <hr />
             </>

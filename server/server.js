@@ -319,10 +319,10 @@ app.get("/searchUsers", (req, res) => {
 
     searchUsers(req.query.q)
         .then((foundUsers) => {
-            console.log(
-                "foundUsers in /searchUsers: ",
-                foundUsers
-            );
+            // console.log(
+            //     "foundUsers in /searchUsers: ",
+            //     foundUsers
+            // );
 
             res.json({
                 success: true,
@@ -337,6 +337,40 @@ app.get("/searchUsers", (req, res) => {
 
 ///////////////////////////////////////////////////////////////////////
 
+app.get("/logout", (req, res) => {
+
+    req.session = null;
+    res.json({
+        success: true,
+    });
+
+});
+
+
+//////////////////////// Part 7, other profiles //////////////////////////////////
+
+app.get("/user/:id", function (req, res) {
+
+    let chosenUserId = req.params.id;
+    console.log(req.params, "req. params");
+
+    if (chosenUserId == req.session.userId || typeof chosenUserId !== "number" ) {
+        res.json({
+            success: false,
+        });
+    } else {
+        getUserInfo(chosenUserId)
+            .then((userData) => {
+                res.json({
+                    success: true,
+                    userData: userData,
+                });
+            })
+            .catch((error) => {
+                console.log("error in getUserInfo function", error);
+            });
+    }
+});
 
 
 /////////////////////////////////////////////////////////////////////////////////////

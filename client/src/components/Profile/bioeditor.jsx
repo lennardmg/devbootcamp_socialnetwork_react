@@ -67,8 +67,8 @@ export default class BioEditor extends React.Component {
 
                 {/* if doesBioExist == true && isBioBeingUpdated == true */}
 
-                <textarea name="" id="" cols="30" rows="10" value={this.state.bio}></textarea>
-                <button> Add Bio </button>
+                {/* <textarea name="" id="" cols="30" rows="10" value={this.state.bio}></textarea>
+                <button> Add Bio </button> */}
      
             </>
         );
