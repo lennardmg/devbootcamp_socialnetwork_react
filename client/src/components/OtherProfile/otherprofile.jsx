@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useHistory } from "react-router-dom";
 import { Link } from "react-router-dom";
+import FriendshipButton from "../FriendshipButton/friendshipbutton.jsx";
 
 const OtherProfile = () => {
 
@@ -70,6 +71,8 @@ const OtherProfile = () => {
                             />
                             <p>{bio}</p>
                         </div>
+
+                        <FriendshipButton />
                     </div>
                     <h4>
                         <Link to="/users"> Back to user search </Link>

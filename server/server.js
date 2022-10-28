@@ -27,6 +27,10 @@ const {
     getUserInfo,
     getUsersWhoRecentlyJoined,
     searchUsers,
+    getFriendship,
+    insertFriendship,
+    deleteFriendship,
+    acceptFriendship
 } = require("../db.js");
 
 const { authenticate } = require("../functions.js");
@@ -257,8 +261,8 @@ app.get("/getInfoAboutSignedInUser", (req, res) => {
 
             const userInfo = user[0];
 
-            console.log("user in getUserInfo: ", user);
-            console.log("userInfo in getUserInfo: ", userInfo);
+            // console.log("user in getUserInfo: ", user);
+            // console.log("userInfo in getUserInfo: ", userInfo);
 
             res.json({
                 success: true,
@@ -297,11 +301,6 @@ app.get("/getUsersWhoRecentlyJoined", (req, res) => {
     getUsersWhoRecentlyJoined()
         .then((latestUsers) => {
 
-            console.log(
-                "latestUsers in /getUsersWhoRecentlyJoined: ",
-                latestUsers
-            );
-
             res.json({
                 success: true,
                 latestUsers: latestUsers,
@@ -335,7 +334,7 @@ app.get("/searchUsers", (req, res) => {
 });
 
 
-///////////////////////////////////////////////////////////////////////
+//////////////////////////////// LogOut ///////////////////////////////////////
 
 app.get("/logout", (req, res) => {
 
@@ -352,15 +351,21 @@ app.get("/logout", (req, res) => {
 app.get("/user/:id", function (req, res) {
 
     let chosenUserId = req.params.id;
-    console.log(req.params, "req. params");
+    // console.log(req.params, "req. params in get/user/:id");
+    console.log("chosenUserId: ", chosenUserId);
+    console.log("req.session.userId: ", req.session.userId);
+    console.log("typeof chosenUserId: ", typeof chosenUserId);
 
-    if (chosenUserId == req.session.userId || typeof chosenUserId !== "number" ) {
+    if (chosenUserId == req.session.userId) {
         res.json({
             success: false,
         });
     } else {
         getUserInfo(chosenUserId)
             .then((userData) => {
+
+                console.log("userData in getUserInfo function", userData);
+
                 res.json({
                     success: true,
                     userData: userData,
@@ -370,6 +375,147 @@ app.get("/user/:id", function (req, res) {
                 console.log("error in getUserInfo function", error);
             });
     }
+});
+
+//////////////////////////// Part 8, friendship request ///////////////////////////////
+
+app.get("/friendship/:id", (req, res) => {
+    
+    let sender = req.session.userId;
+    let recepient = req.params.id;
+
+    getFriendship(sender, recepient)
+        .then((friendshipInfo) => {
+            // console.log(
+            //     "friendshipInfo in getFriendship @ get/friendship/:id ",
+            //     friendshipInfo
+            // );
+            console.log("/////////////////////////////////////////");
+            
+            console.log("friendshipInfo: ", friendshipInfo);
+            console.log("friendshipInfo.length: ", friendshipInfo.length);
+            console.log("sender: ", sender);
+            console.log("recepient: ", recepient);
+            
+
+
+            if (friendshipInfo.length > 0) {
+
+                console.log("friendshipInfo.sender_id: ", friendshipInfo[0].sender_id);
+
+                if (friendshipInfo[0].accepted == false) {
+
+                    if (friendshipInfo[0].sender_id == sender) {
+                        res.json({
+                            friendshipRequestExists: true,
+                            accepted: false,
+                            senderIsLoggedInUser: true,
+                        });
+
+                    } else {
+                        res.json({
+                            friendshipRequestExists: true,
+                            accepted: false,
+                            senderIsLoggedInUser: false,
+                        });
+                    }
+
+                } else {
+                    res.json({
+                        friendshipRequestExists: true,
+                        accepted: true,
+                    });
+                }
+            } else {
+                res.json({
+                    friendshipRequestExists: false,
+                });
+            }
+        })
+        .catch((error) => {
+            console.log(
+                "error in getFriendship @ get/friendship/:id",
+                error
+            );
+            res.json({
+                error: "Sorry, something went wrong...",
+            });
+        });
+
+});
+
+
+app.post("/friendship/:id", (req, res) => {
+
+    let sender = req.session.userId;
+    let recepient = req.params.id;
+
+    insertFriendship(sender, recepient)
+        .then(() => {
+            res.json({
+                friendshipRequestExists: true,
+                accepted: false,
+            });
+        })
+        .catch((error) => {
+            console.log("error in insertFriendship @ post/friendship/:id", error);
+            res.json({
+                error: "Sorry, something went wrong...",
+            });
+        });
+
+});
+
+
+app.post("/friendship/accept/:id", (req, res) => {
+    let sender = req.session.userId;
+    let recepient = req.params.id;
+
+    acceptFriendship(sender, recepient)
+        .then(() => {
+            res.json({
+                friendshipRequestExists: true,
+                accepted: true,
+            });
+        })
+        .catch((error) => {
+            console.log(
+                "error in acceptFriendship @ post/friendship/accept/:id",
+                error
+            );
+            res.json({
+                error: "Sorry, something went wrong...",
+            });
+        });
+});
+
+
+app.post("/friendship/delete/:id", (req, res) => {
+
+    let sender = req.session.userId;
+    let recepient = req.params.id;
+
+    console.log("server request to delete happened");
+
+    deleteFriendship(sender, recepient)
+        .then(() => {
+
+            console.log("i'm inside deleteFriendship");
+
+            res.json({
+                friendshipRequestExists: false,
+                accepted: false,
+            });
+        })
+        .catch((error) => {
+            console.log(
+                "error in deleteFriendship @ post/friendship/delete/:id",
+                error
+            );
+            res.json({
+                error: "Sorry, something went wrong...",
+            });
+        });
 });
 
 

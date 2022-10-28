@@ -19,6 +19,7 @@ fetch("/user/id")
         } else {
             ReactDOM.render(
                 <BrowserRouter>
+                
                     <App />
                 </BrowserRouter>,
                 document.querySelector("main")

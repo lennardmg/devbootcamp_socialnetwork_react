@@ -91,3 +91,64 @@ module.exports.resetPassword = function (email, password) {
             console.log("error in resetPassword function", error)
         );
 };
+
+
+
+// 1) getFriendship
+// whenever visiting somebodys profile
+// find a friendship between
+
+module.exports.getFriendship = function (user1, user2) {
+    const sql = `
+    SELECT * FROM friendships
+        WHERE (sender_id = $1 AND recipient_id = $2)
+        OR (sender_id = $2 AND recipient_id = $1);
+    `;
+    return db
+        .query(sql, [user1, user2])
+        .then((result) => result.rows);
+};
+
+// 2) insertFriendship
+// once the button is clicked, creates an unaccepted friendship, boolean = false 
+
+module.exports.insertFriendship = function (user1, user2) {
+    const sql = `
+    INSERT INTO friendships (sender_id, recipient_id)
+    VALUES ($1, $2) 
+    RETURNING *
+    `;
+    return db
+        .query(sql, [user1, user2])
+        .then((result) => result.rows);
+};
+
+// 3) deleteFriendship
+// delete the row by the 2 (!) user IDs
+
+module.exports.deleteFriendship = function (user1, user2) {
+    const sql = `
+    DELETE FROM friendships 
+    WHERE (sender_id = $1 AND recipient_id = $2)
+    OR (sender_id = $2 AND recipient_id = $1);
+    `;
+    return db
+        .query(sql, [user1, user2])
+        .then((result) => result.rows);
+};
+
+// 4) acceptFriendship
+// find friendship
+// update the boolean row by the 2 (!) user IDs
+
+module.exports.acceptFriendship = function (user1, user2) {
+    const sql = `
+    UPDATE friendships SET accepted = true 
+    WHERE (sender_id = $1 AND recipient_id = $2)
+    OR (sender_id = $2 AND recipient_id = $1);
+    `;
+    return db
+        .query(sql, [user1, user2])
+        .then((result) => result.rows);
+};
+
