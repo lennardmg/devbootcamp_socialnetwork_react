@@ -154,3 +154,39 @@ h1, h2, h3, h4 {
     margin-left: 20px;
     font-style: italic;
 }
+
+.uploaderForm {
+    position: fixed;
+    border: 1px solid black;
+    height: 300px;
+    width: 300px;
+    border-radius: 10px;
+    background-color: white;
+    margin: 20px;
+    padding: 10px;
+    z-index: 150;
+    transition: all 1000ms ease-out;
+    left: 30%;
+    top: 20%;
+}
+
+.uploaderForm > * {
+    margin: 10px;
+}
+
+.greyBackground {
+    position: fixed;
+    z-index: 100;
+    min-width: 100%;
+    min-height: 100%;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    transition: all 1000ms ease-out;
+}
+
+.closeButton {
+    cursor: pointer;
+    text-align: right;
+    font-size: 35px;
+}

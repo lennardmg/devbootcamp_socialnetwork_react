@@ -32,10 +32,6 @@ const OtherProfile = () => {
         })
             .then((res) => res.json())
             .then((data) => {
-                console.log(
-                    "userData received from server in useEffect from OtherProfile: ",
-                    data
-                );
 
                 if (data.success == false || data.userData.length == 0) {
                     

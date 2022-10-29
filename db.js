@@ -152,3 +152,16 @@ module.exports.acceptFriendship = function (user1, user2) {
         .then((result) => result.rows);
 };
 
+
+module.exports.updateProfilePic = function (id, url) {
+    const sql = `
+        UPDATE users SET profile_pic_url = $2 
+        WHERE id = $1;
+    `;
+    return db
+        .query(sql, [id, url])
+        .then((result) => result.rows)
+        .catch((error) =>
+            console.log("error in storePwResetCode function", error)
+        );
+};

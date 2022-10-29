@@ -1,19 +1,17 @@
-// a function component needs to return what its going to show
 
-export default function ProfilePic ({ profilePicUrl, togglePopup }) {
+export default function ProfilePic ({ profile_pic_url, togglePopup }) {
 
-    profilePicUrl = profilePicUrl || "https://th.bing.com/th/id/OIP.1LRUIB2OXVePxD5hQm4fqwHaHa?pid=ImgDet&rs=1";
+    profile_pic_url = profile_pic_url || "https://th.bing.com/th/id/OIP.1LRUIB2OXVePxD5hQm4fqwHaHa?pid=ImgDet&rs=1";
 
     return (
         <>
-            <button onClick={togglePopup}>
-                
+            <button onClick={() => togglePopup()}>
+
                 <img
-                    src={profilePicUrl}
+                    src={profile_pic_url}
                     alt="Profile Pic"
                     style={{ height: "50px", width: "50px" }}
                 />
-               
             </button>
         </>
     );

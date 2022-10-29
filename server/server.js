@@ -7,7 +7,8 @@ const cookieSession = require("cookie-session");
 const bcrypt = require("bcryptjs");
 app.use(express.json());
 app.use(compression());
-const cryptoRandomString = require('crypto-random-string');
+const cryptoRandomString = require("crypto-random-string");
+const s3 = require("../s3");
 
 app.use(express.static(path.join(__dirname, "..", "client", "public")));
 
@@ -30,10 +31,11 @@ const {
     getFriendship,
     insertFriendship,
     deleteFriendship,
-    acceptFriendship
+    acceptFriendship,
+    updateProfilePic,
 } = require("../db.js");
 
-const { authenticate } = require("../functions.js");
+const { authenticate, uploader } = require("../functions.js");
 
 app.use((req, res, next) => {
     console.log("---------------------");
@@ -52,7 +54,6 @@ app.get("/user/id", function (req, res) {
         userId: req.session.userId,
     });
 });
-
 
 app.post("/registration", (req, res) => {
     const firstname = req.body.firstname;
@@ -102,7 +103,6 @@ app.post("/registration", (req, res) => {
 });
 
 app.post("/login", (req, res) => {
-
     console.log("req.body in post /login: ", req.body);
 
     const email = req.body.email;
@@ -156,9 +156,7 @@ app.post("/login", (req, res) => {
         });
 });
 
-
 app.post("/checkemail", (req, res) => {
-
     const email = req.body.email;
 
     findUserByEmail(email)
@@ -196,37 +194,31 @@ app.post("/checkemail", (req, res) => {
         });
 });
 
-
-
 app.post("/resetpassword", (req, res) => {
-
     const email = req.body.email;
     const code = req.body.code;
     const newPassword = req.body.password;
 
     findUserByEmail(email)
         .then((user) => {
-
             const userInfo = user[0];
 
             console.log("userInfo in findUserByEmail: ", userInfo);
             console.log("code: ", code);
 
             if (userInfo.code == code) {
-
                 function hashing() {
-
                     bcrypt
                         .genSalt()
                         .then((salt) => {
                             return bcrypt.hash(newPassword, salt);
                         })
                         .then((hash) => {
-  
                             resetPassword(email, hash).then(() => {
                                 res.json({
                                     success: true,
-                                    message: "Code approved, updating password ...",
+                                    message:
+                                        "Code approved, updating password ...",
                                 });
                             });
                         })
@@ -239,9 +231,7 @@ app.post("/resetpassword", (req, res) => {
                 }
 
                 hashing();
-                 
             }
-
         })
         .catch((error) => {
             console.log("error in findUserByEmail function", error);
@@ -252,13 +242,9 @@ app.post("/resetpassword", (req, res) => {
         });
 });
 
-
-
 app.get("/getInfoAboutSignedInUser", (req, res) => {
-
     getUserInfo(req.session.userId)
         .then((user) => {
-
             const userInfo = user[0];
 
             // console.log("user in getUserInfo: ", user);
@@ -268,7 +254,6 @@ app.get("/getInfoAboutSignedInUser", (req, res) => {
                 success: true,
                 user: userInfo,
             });
-
         })
         .catch((error) => {
             console.log("error in getUserInfo function", error);
@@ -277,30 +262,34 @@ app.get("/getInfoAboutSignedInUser", (req, res) => {
                 message: "Sorry, something went wrong...",
             });
         });
-
 });
 
+app.post(
+    "/updateProfilePicture",
+    uploader.single("file"),
+    s3.upload,
+    (req, res) => {
+        console.log("req.file in post updatePic: ", req.file);
 
+        let userId = req.session.userId;
+        let url = `https://s3.amazonaws.com/spicedling/${req.file.filename}`;
 
-app.post("/updateProfilePicture", (req, res) => {
+        updateProfilePic(userId, url).then(() => {
+            res.json({
+                success: true,
+                profile_pic_url: url,
+            });
+        });
+    }
+);
 
-});
-
-
-
-app.post("/updateBio", (req, res) => {
-
-
-});
-
+app.post("/updateBio", (req, res) => {});
 
 ///////////////////// Finding people (Part 6) /////////////////////////
 
 app.get("/getUsersWhoRecentlyJoined", (req, res) => {
-
     getUsersWhoRecentlyJoined()
         .then((latestUsers) => {
-
             res.json({
                 success: true,
                 latestUsers: latestUsers,
@@ -311,18 +300,11 @@ app.get("/getUsersWhoRecentlyJoined", (req, res) => {
         });
 });
 
-
 app.get("/searchUsers", (req, res) => {
-
     console.log("req.query in /searchUsers: ", req.query);
 
     searchUsers(req.query.q)
         .then((foundUsers) => {
-            // console.log(
-            //     "foundUsers in /searchUsers: ",
-            //     foundUsers
-            // );
-
             res.json({
                 success: true,
                 foundUsers: foundUsers,
@@ -333,23 +315,18 @@ app.get("/searchUsers", (req, res) => {
         });
 });
 
-
 //////////////////////////////// LogOut ///////////////////////////////////////
 
 app.get("/logout", (req, res) => {
-
     req.session = null;
     res.json({
         success: true,
     });
-
 });
-
 
 //////////////////////// Part 7, other profiles //////////////////////////////////
 
 app.get("/user/:id", function (req, res) {
-
     let chosenUserId = req.params.id;
     // console.log(req.params, "req. params in get/user/:id");
     console.log("chosenUserId: ", chosenUserId);
@@ -363,7 +340,6 @@ app.get("/user/:id", function (req, res) {
     } else {
         getUserInfo(chosenUserId)
             .then((userData) => {
-
                 console.log("userData in getUserInfo function", userData);
 
                 res.json({
@@ -380,7 +356,6 @@ app.get("/user/:id", function (req, res) {
 //////////////////////////// Part 8, friendship request ///////////////////////////////
 
 app.get("/friendship/:id", (req, res) => {
-    
     let sender = req.session.userId;
     let recepient = req.params.id;
 
@@ -391,27 +366,25 @@ app.get("/friendship/:id", (req, res) => {
             //     friendshipInfo
             // );
             console.log("/////////////////////////////////////////");
-            
+
             console.log("friendshipInfo: ", friendshipInfo);
             console.log("friendshipInfo.length: ", friendshipInfo.length);
             console.log("sender: ", sender);
             console.log("recepient: ", recepient);
-            
-
 
             if (friendshipInfo.length > 0) {
-
-                console.log("friendshipInfo.sender_id: ", friendshipInfo[0].sender_id);
+                console.log(
+                    "friendshipInfo.sender_id: ",
+                    friendshipInfo[0].sender_id
+                );
 
                 if (friendshipInfo[0].accepted == false) {
-
                     if (friendshipInfo[0].sender_id == sender) {
                         res.json({
                             friendshipRequestExists: true,
                             accepted: false,
                             senderIsLoggedInUser: true,
                         });
-
                     } else {
                         res.json({
                             friendshipRequestExists: true,
@@ -419,7 +392,6 @@ app.get("/friendship/:id", (req, res) => {
                             senderIsLoggedInUser: false,
                         });
                     }
-
                 } else {
                     res.json({
                         friendshipRequestExists: true,
@@ -433,20 +405,14 @@ app.get("/friendship/:id", (req, res) => {
             }
         })
         .catch((error) => {
-            console.log(
-                "error in getFriendship @ get/friendship/:id",
-                error
-            );
+            console.log("error in getFriendship @ get/friendship/:id", error);
             res.json({
                 error: "Sorry, something went wrong...",
             });
         });
-
 });
 
-
 app.post("/friendship/:id", (req, res) => {
-
     let sender = req.session.userId;
     let recepient = req.params.id;
 
@@ -458,14 +424,15 @@ app.post("/friendship/:id", (req, res) => {
             });
         })
         .catch((error) => {
-            console.log("error in insertFriendship @ post/friendship/:id", error);
+            console.log(
+                "error in insertFriendship @ post/friendship/:id",
+                error
+            );
             res.json({
                 error: "Sorry, something went wrong...",
             });
         });
-
 });
-
 
 app.post("/friendship/accept/:id", (req, res) => {
     let sender = req.session.userId;
@@ -489,9 +456,7 @@ app.post("/friendship/accept/:id", (req, res) => {
         });
 });
 
-
 app.post("/friendship/delete/:id", (req, res) => {
-
     let sender = req.session.userId;
     let recepient = req.params.id;
 
@@ -499,7 +464,6 @@ app.post("/friendship/delete/:id", (req, res) => {
 
     deleteFriendship(sender, recepient)
         .then(() => {
-
             console.log("i'm inside deleteFriendship");
 
             res.json({
@@ -517,7 +481,6 @@ app.post("/friendship/delete/:id", (req, res) => {
             });
         });
 });
-
 
 /////////////////////////////////////////////////////////////////////////////////////
 app.get("*", function (req, res) {
