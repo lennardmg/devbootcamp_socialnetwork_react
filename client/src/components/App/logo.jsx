@@ -11,7 +11,7 @@ export default class Logo extends React.Component {
                     <img
                         src="https://www.giftbasketbounty.com/files/1327644/uploaded/Snackdown_819332.jpg"
                         alt="Snack Lovers Logo"
-                        style={{ height: "80px", width: "80px" }}
+                        style={{ height: "100px", width: "100px" }}
                     />
                 </div>
             </>

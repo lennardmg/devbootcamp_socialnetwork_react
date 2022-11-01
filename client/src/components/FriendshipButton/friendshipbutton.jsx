@@ -21,20 +21,20 @@ const FriendshipButton = () => {
             .then((friendshipData) => {
 
                 if (friendshipData.friendshipRequestExists == false) {
-                    setButtontext("Send Friend Request");
+                    setButtontext("🤝 Send Friend Request");
 
                 } else {
 
                     if (friendshipData.accepted == false) {
 
                         if (friendshipData.senderIsLoggedInUser == true) {
-                            setButtontext("Cancel Request");
+                            setButtontext("❌ Cancel Request");
                         } else {
-                            setButtontext("Accept Request");
+                            setButtontext("💚 Accept Request");
                         }
 
                     } else {
-                        setButtontext("Delete from friends");
+                        setButtontext("❌ Delete from friends");
                     }
 
                 }      
@@ -43,8 +43,7 @@ const FriendshipButton = () => {
 
     const checkFriendshipStatus = (recepientId) => {
 
-        if (buttontext == "Send Friend Request") {
-
+        if (buttontext == "🤝 Send Friend Request") {
             fetch(`/friendship/${recepientId}`, {
                 method: "post",
                 headers: {
@@ -53,13 +52,13 @@ const FriendshipButton = () => {
             })
                 .then((res) => res.json())
                 .then(() => {
-
                     console.log("Send Friend Request happened");
                     location.reload();
                 });
-
-        } else if (buttontext == "Delete from friends" || buttontext == "Cancel Request") {
-
+        } else if (
+            buttontext == "❌ Delete from friends" ||
+            buttontext == "❌ Cancel Request"
+        ) {
             fetch(`/friendship/delete/${recepientId}`, {
                 method: "post",
                 headers: {
@@ -71,9 +70,7 @@ const FriendshipButton = () => {
                     console.log("Delete happened");
                     location.reload();
                 });
-
-        } else if (buttontext == "Accept Request") {
-
+        } else if (buttontext == "💚 Accept Request") {
             fetch(`/friendship/accept/${recepientId}`, {
                 method: "post",
                 headers: {

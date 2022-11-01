@@ -54,12 +54,13 @@ const OtherProfile = () => {
 
             {!(first_name == "") && (
                 <>
-                    <div className="profile">
+                    <div className="otherProfile">
                         <h2>
                             Profile of {first_name} {last_name}
                         </h2>
                         <h3>{email}</h3>
-                        <div className="profileFlex">
+                        
+                        <div className="otherProfileFlex">
                             <img
                                 src={profile_pic_url}
                                 alt="Profile Pic"

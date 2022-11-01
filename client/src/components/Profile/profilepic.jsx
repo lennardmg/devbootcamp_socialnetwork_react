@@ -10,8 +10,9 @@ export default function ProfilePic ({ profile_pic_url, togglePopup }) {
                 <img
                     src={profile_pic_url}
                     alt="Profile Pic"
-                    style={{ height: "50px", width: "50px" }}
+                    style={{ height: "100%", width: "100%", minHeight: "65px", objectFit: "cover" }}
                 />
+
             </button>
         </>
     );
