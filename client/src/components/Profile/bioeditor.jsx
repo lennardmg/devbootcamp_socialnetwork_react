@@ -12,34 +12,57 @@ export default class BioEditor extends React.Component {
         super(props);
         this.state = {
             isBioBeingUpdated: false,
-            currentBio: props.bio,
+            currentBio: "",
         };
         this.toggleEditMode = this.toggleEditMode.bind(this);
         this.changeCurrentBio = this.changeCurrentBio.bind(this);
         this.handleSubmitBio = this.handleSubmitBio.bind(this);
+        this.clickAndSetExistingBio = this.clickAndSetExistingBio.bind(this);
     }
 
-    componentDidUpdate(prevProps, prevState) {
 
+    // componentDidMount() {
 
-        console.log("prevProps: ", prevProps);
-        console.log("prevState: ", prevState);
+    //     setTimeout(
+    //         console.log("this.props: ", this.props),
+    //         this.setState({
+    //             currentBio: this.props.bio,
+    //         }), 4000);  
+    // }
 
-        if (prevState.bio !== this.props.bio) {
+    /////// the setState causes an infinite loop //////////////
+
+    // componentDidUpdate(prevProps, prevState) {
+
+    //     console.log("prevProps: ", prevProps);
+    //     console.log("prevState: ", prevState);
+
+    //     if (prevState.currentBio == this.props.bio) {
+
+    //         console.log("the currentBio got updatet");
+    //     }
+
+    //     else if (prevState.bio !== this.props.bio) {
             
-            console.log("i happened in the componentDidUpdate");
+    //         console.log("i happened in the componentDidUpdate");
 
-            // this.setState({
-            //     currentBio: this.props.bio,
-            // });
-        }
-
-    }
+    //         this.setState({
+    //             currentBio: this.props.bio,
+    //         });
+    //     }
+    // }
 
     toggleEditMode() {
         this.setState({
             isBioBeingUpdated: !this.state.isBioBeingUpdated,
         });
+    }
+
+    clickAndSetExistingBio() {
+        this.setState({
+            currentBio: this.props.bio,
+        });
+        this.toggleEditMode();
     }
 
     changeCurrentBio(e) {
@@ -69,7 +92,7 @@ export default class BioEditor extends React.Component {
                             <p style={{ fontStyle: "italic" }}>
                                 {this.props.bio}
                             </p>
-                            <button onClick={this.toggleEditMode}>
+                            <button onClick={this.clickAndSetExistingBio}>
                                 Edit existing Bio
                             </button>
                         </>
