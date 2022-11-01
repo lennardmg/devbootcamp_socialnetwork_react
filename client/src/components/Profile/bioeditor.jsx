@@ -8,68 +8,92 @@ import React from "react";
 // to parent in order to update the state of the original bio
 
 export default class BioEditor extends React.Component {
-
     constructor(props) {
         super(props);
         this.state = {
-            bio: props.bio,
-            isBioBeingUpdated: false
+            isBioBeingUpdated: false,
+            currentBio: props.bio,
         };
-        this.updateBio = this.updateBio.bind(this);
+        this.toggleEditMode = this.toggleEditMode.bind(this);
+        this.changeCurrentBio = this.changeCurrentBio.bind(this);
+        this.handleSubmitBio = this.handleSubmitBio.bind(this);
     }
-    
-    // componentDidMount() {
-        
-    //     if (
-    //         this.state.bio == "" ||
-    //         this.state.bio == null ||
-    //         this.state.bio == undefined
-    //     ) {
-    //         let doesBioExist = false;
-    //     } 
-    //     let doesBioExist = true;
 
-    // }
+    componentDidUpdate(prevProps, prevState) {
+
+
+        console.log("prevProps: ", prevProps);
+        console.log("prevState: ", prevState);
+
+        if (prevState.bio !== this.props.bio) {
+            
+            console.log("i happened in the componentDidUpdate");
+
+            // this.setState({
+            //     currentBio: this.props.bio,
+            // });
+        }
+
+    }
 
     toggleEditMode() {
-        
+        this.setState({
+            isBioBeingUpdated: !this.state.isBioBeingUpdated,
+        });
     }
 
-    updateBio() {
+    changeCurrentBio(e) {
+        this.setState({
+            currentBio: e.target.value,
+        });
+    }
 
-        let newBio = "";
-
+    handleSubmitBio(currentBio) {
+        this.props.updateBio(currentBio);
+        this.toggleEditMode();
     }
 
     render() {
         return (
             <>
+                {this.state.isBioBeingUpdated == false &&
+                    (this.props.bio == "" ? (
+                        <>
+                            <p>Tell us something about yourself:</p>
+                            <button onClick={this.toggleEditMode}>
+                                Add a Bio
+                            </button>
+                        </>
+                    ) : (
+                        <>
+                            <p style={{ fontStyle: "italic" }}>
+                                {this.props.bio}
+                            </p>
+                            <button onClick={this.toggleEditMode}>
+                                Edit existing Bio
+                            </button>
+                        </>
+                    ))}
 
-                {/* if doesBioExist == false */}
-
-                <p> Tell us something about yourself: </p>
-                <button onClick={this.toggleEditMode()}> Add a bio </button>
-
-                {/* if doesBioExist == false && isBioBeingUpdated == true*/}
-
-                <textarea name="" id="" cols="30" rows="10"></textarea>
-                <button> Edit Bio </button>
-
-
-
-
-                {/* if doesBioExist == true && isBioBeingUpdated == false*/}
-
-                <p>{this.state.bio}</p> 
-                {/* onClick still missing */}
-                <button> Edit Bio </button>
-
-
-                {/* if doesBioExist == true && isBioBeingUpdated == true */}
-
-                {/* <textarea name="" id="" cols="30" rows="10" value={this.state.bio}></textarea>
-                <button> Add Bio </button> */}
-     
+                {this.state.isBioBeingUpdated && (
+                    <>
+                        <textarea
+                            name=""
+                            id=""
+                            cols="30"
+                            rows="10"
+                            value={this.state.currentBio}
+                            onChange={this.changeCurrentBio}
+                        ></textarea>
+                        <button
+                            onClick={() =>
+                                this.handleSubmitBio(this.state.currentBio)
+                            }
+                        >
+                            Submit Bio
+                        </button>
+                    </>
+                )}
             </>
         );
     }

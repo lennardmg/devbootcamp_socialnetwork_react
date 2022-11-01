@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 export default function Profile(props) {
 
-    // console.log("props in Profile function: ", props);
+    console.log("props in Profile function: ", props);
 
     return (
         <>
@@ -25,7 +25,10 @@ export default function Profile(props) {
                         {props.first_name} {props.last_name}
                     </h2>
 
-                    <BioEditor bio={props.bio} updateBio={props.updateBio} />
+                    <BioEditor 
+                        bio={props.bio} 
+                        updateBio={props.updateBio} 
+                    />
                 </div>
             </div>
 

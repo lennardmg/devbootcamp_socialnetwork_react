@@ -165,3 +165,13 @@ module.exports.updateProfilePic = function (id, url) {
             console.log("error in storePwResetCode function", error)
         );
 };
+
+module.exports.updateBio = function (id, bio) {
+    const sql = `
+    UPDATE users SET bio = $2
+    WHERE id = $1;
+    `;
+    return db
+        .query(sql, [id, bio])
+        .then((result) => result.rows);
+};

@@ -15,7 +15,7 @@ export default class App extends Component {
         this.state = {
             openPopup: false,
         };
-        // this.updateBio = this.updateBio.bind(this);
+        this.updateBio = this.updateBio.bind(this);
         this.togglePopup = this.togglePopup.bind(this);
         this.setProfilePic = this.setProfilePic.bind(this);
     }
@@ -40,6 +40,8 @@ export default class App extends Component {
             .then((data) => {
 
                 if (data.success == true) {
+                    !data.user.bio && (data.user.bio = "");
+
                     this.setState(data.user);
                 }
             });
@@ -51,9 +53,26 @@ export default class App extends Component {
         });
     }
 
-    // updateBio() {
-    //     // somehow needs to update the bio (maybe fetch POST to server to add to DB?)
-    // }
+    updateBio(newBio) {
+
+        fetch("/updateBio", {
+            method: "post",
+            headers: {
+                "content-type": "application/json",
+            },
+            body: JSON.stringify({
+                bio: newBio
+            }),
+        })
+            .then((res) => res.json())
+            .then((data) => {
+                if (data.success) {
+                    this.setState({
+                        bio: newBio,
+                    });
+                }
+            });
+    }
 
     render() {
         return (
@@ -91,7 +110,7 @@ export default class App extends Component {
                         first_name={this.state.first_name}
                         last_name={this.state.last_name}
                         bio={this.state.bio}
-                        // updateBio={this.updateBio}
+                        updateBio={this.updateBio}
                     />
                 </Route>
 

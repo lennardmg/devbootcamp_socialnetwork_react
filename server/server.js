@@ -33,6 +33,7 @@ const {
     deleteFriendship,
     acceptFriendship,
     updateProfilePic,
+    updateBio
 } = require("../db.js");
 
 const { authenticate, uploader } = require("../functions.js");
@@ -248,7 +249,7 @@ app.get("/getInfoAboutSignedInUser", (req, res) => {
             const userInfo = user[0];
 
             // console.log("user in getUserInfo: ", user);
-            // console.log("userInfo in getUserInfo: ", userInfo);
+            console.log("userInfo in getUserInfo: ", userInfo);
 
             res.json({
                 success: true,
@@ -283,7 +284,18 @@ app.post(
     }
 );
 
-app.post("/updateBio", (req, res) => {});
+app.post("/updateBio", (req, res) => {
+
+    updateBio(req.session.userId, req.body.bio)
+        .then(() => {
+            res.json({
+                success: true
+            });
+        })
+        .catch((error) => {
+            console.log("error in updateBio function", error);
+        });
+});
 
 ///////////////////// Finding people (Part 6) /////////////////////////
 
