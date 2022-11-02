@@ -9,7 +9,6 @@ export default function Profile(props) {
     return (
         <>
             <div className="profile">
-
                 <div className="leftProfilePart">
                     <ProfilePic
                         first_name={props.first_name}
@@ -25,15 +24,13 @@ export default function Profile(props) {
                         {props.first_name} {props.last_name}
                     </h2>
 
-                    <BioEditor 
-                        bio={props.bio} 
-                        updateBio={props.updateBio} 
-                    />
+                    <BioEditor bio={props.bio} updateBio={props.updateBio} />
                 </div>
             </div>
 
             <h4>
-                <Link to="/users"> Search for users </Link>
+                <Link to="/users"> Search for users </Link> &nbsp; &nbsp; &nbsp;
+                <Link to="/friends"> See your list of friends </Link>
             </h4>
         </>
     );

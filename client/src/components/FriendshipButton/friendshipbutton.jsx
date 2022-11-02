@@ -3,15 +3,16 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 
-const FriendshipButton = () => {
+const FriendshipButton = ({friendsid}) => {
     // const [status, setStatus] = useState([]);
     const [buttontext, setButtontext] = useState("");
 
-    const id = useParams();
+    const id = friendsid || (useParams()).id;
+
 
     useEffect(() => {
 
-        fetch(`/friendship/${id.id}`, {
+        fetch(`/friendship/${id}`, {
             method: "get",
             headers: {
                 "content-type": "application/json",
@@ -87,7 +88,7 @@ const FriendshipButton = () => {
 
     return (
         <>
-            <button className="friendship_button" onClick={() => checkFriendshipStatus(id.id)}>{buttontext}</button>
+            <button className="friendship_button" onClick={() => checkFriendshipStatus(id)}>{buttontext}</button>
         </>
     );
 };

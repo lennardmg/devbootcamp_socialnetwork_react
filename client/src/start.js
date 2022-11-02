@@ -3,6 +3,13 @@ import Welcome from "./components/Welcome/welcome.jsx";
 import App from "./components/App/app.jsx";
 import { BrowserRouter } from "react-router-dom";
 
+// import { createRoot } from "react-dom/client";
+import { Provider } from "react-redux";
+import store from "./Redux/store.js";
+
+// const root = createRoot(document.getElementById("root"));
+
+
 fetch("/user/id")
     .then((response) => response.json())
     .then((data) => {
@@ -18,10 +25,12 @@ fetch("/user/id")
             );
         } else {
             ReactDOM.render(
-                <BrowserRouter>
+                <Provider store={store}>
+                    <BrowserRouter>
                 
-                    <App />
-                </BrowserRouter>,
+                        <App />
+                    </BrowserRouter>,
+                </Provider>,
                 document.querySelector("main")
             );
         }

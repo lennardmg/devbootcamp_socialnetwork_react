@@ -99,7 +99,8 @@ const FindPeople = () => {
             )}
 
             <h4>
-                <Link to="/profile"> Your profile </Link>
+                <Link to="/profile"> Your profile </Link> &nbsp; &nbsp; &nbsp;
+                <Link to="/friends"> See your list of friends </Link>
             </h4>
         </>
     );

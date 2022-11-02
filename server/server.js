@@ -33,7 +33,8 @@ const {
     deleteFriendship,
     acceptFriendship,
     updateProfilePic,
-    updateBio
+    updateBio,
+    showFriends
 } = require("../db.js");
 
 const { authenticate, uploader } = require("../functions.js");
@@ -42,7 +43,7 @@ app.use((req, res, next) => {
     console.log("---------------------");
     console.log("req.url:", req.url);
     console.log("req.method:", req.method);
-    console.log("req.session:", req.session);
+    console.log("logged-in user, req.session.userId:", req.session.userId);
     console.log("req.body:", req.body);
     console.log("---------------------");
     next();
@@ -373,16 +374,13 @@ app.get("/friendship/:id", (req, res) => {
 
     getFriendship(sender, recepient)
         .then((friendshipInfo) => {
-            // console.log(
-            //     "friendshipInfo in getFriendship @ get/friendship/:id ",
-            //     friendshipInfo
-            // );
-            console.log("/////////////////////////////////////////");
 
-            console.log("friendshipInfo: ", friendshipInfo);
-            console.log("friendshipInfo.length: ", friendshipInfo.length);
-            console.log("sender: ", sender);
-            console.log("recepient: ", recepient);
+            // console.log("/////////////////////////////////////////");
+
+            // console.log("friendshipInfo: ", friendshipInfo);
+            // console.log("friendshipInfo.length: ", friendshipInfo.length);
+            // console.log("sender: ", sender);
+            // console.log("recepient: ", recepient);
 
             if (friendshipInfo.length > 0) {
                 console.log(
@@ -491,6 +489,25 @@ app.post("/friendship/delete/:id", (req, res) => {
             res.json({
                 error: "Sorry, something went wrong...",
             });
+        });
+});
+
+
+app.get("/showFriends", (req, res) => {
+
+    showFriends(req.session.userId)
+        .then((friends) => {
+            console.log("I got your friends from DB");
+            console.log("friends: ", friends);
+
+            res.json({
+                success: true,
+                friends,
+            });
+        })
+        .catch((error) => {
+            console.log("error in showFriends @ get/showFriends", error);
+            res.json({error: "Sorry, something went wrong...",});
         });
 });
 

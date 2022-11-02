@@ -7,6 +7,7 @@ import Uploader from "../Profile/uploader.jsx";
 import FindPeople from "../SearchInput/findpeople.jsx";
 import LogOut from "../Login/logout.jsx";
 import OtherProfile from "../OtherProfile/otherprofile.jsx";
+import FriendsList from "../FriendsList/friendslist.jsx";
 
 
 export default class App extends Component {
@@ -120,6 +121,10 @@ export default class App extends Component {
 
                 <Route path="/users/:id">
                     <OtherProfile />
+                </Route>
+
+                <Route path="/friends">
+                    <FriendsList />
                 </Route>
 
                 <hr />

@@ -21,16 +21,8 @@ export default class BioEditor extends React.Component {
     }
 
 
-    // componentDidMount() {
-
-    //     setTimeout(
-    //         console.log("this.props: ", this.props),
-    //         this.setState({
-    //             currentBio: this.props.bio,
-    //         }), 4000);  
-    // }
-
     /////// the setState causes an infinite loop //////////////
+    ////// current setup doesnt let me change the textfield input, always jumps back to initial this.props.bio //////
 
     // componentDidUpdate(prevProps, prevState) {
 
