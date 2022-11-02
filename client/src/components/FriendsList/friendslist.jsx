@@ -1,19 +1,33 @@
-import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useEffect } from "react";
 import FriendshipButton from "../FriendshipButton/friendshipbutton.jsx";
 import { Link } from "react-router-dom";
 import { useHistory } from "react-router-dom";
-
+import { useSelector, useDispatch } from "react-redux";
+import { setFriendsAction } from "../../Redux/friends.slice.js";
 
 const FriendsList = () => {
-    const [pendingFriends, setPendingFriends] = useState([]);
-    const [acceptedFriends, setAcceptedFriends] = useState([]);
+    // const [pendingFriends, setPendingFriends] = useState([]);
+    // const [acceptedFriends, setAcceptedFriends] = useState([]);
 
     const history = useHistory();
 
     const openProfile = (id) => {
         history.push(`/users/${id}`);
     };
+
+    /////// REDUX PART //////
+
+    const dispatch = useDispatch();
+
+    // useSelector is used to retrieve updated data from the global redux store
+    const pendingFriends = useSelector((state) => {
+        return state.friends?.filter((friend) => !friend.accepted) || [];
+    });
+    const acceptedFriends = useSelector((state) => {
+        return state.friends?.filter((friend) => friend.accepted) || [];
+    });
+
+    ///////////////////////////
 
     useEffect(() => {
         fetch("/showFriends", {
@@ -24,22 +38,28 @@ const FriendsList = () => {
         })
             .then((res) => res.json())
             .then((allFriends) => {
-
                 // console.log("allFriends in useEffect of FriendsList: ", allFriends.friends);
-        
-                function filterFriends (allFriends) {
 
-                    let pendingFriends = allFriends.friends.filter(friend => friend.accepted == false);
-                    let acceptedFriends = allFriends.friends.filter(friend => friend.accepted == true); 
+                // dispatch received friends
 
-                    // console.log("pendingFriends: ", pendingFriends);
-                    // console.log("acceptedFriends: ", acceptedFriends);
+                dispatch(setFriendsAction(allFriends.friends));
 
-                    setPendingFriends(pendingFriends);
-                    setAcceptedFriends(acceptedFriends);
-                }
+                // function filterFriends(allFriends) {
+                //     let pendingFriends = allFriends.friends.filter(
+                //         (friend) => friend.accepted == false
+                //     );
+                //     let acceptedFriends = allFriends.friends.filter(
+                //         (friend) => friend.accepted == true
+                //     );
 
-                filterFriends(allFriends);
+                //     // console.log("pendingFriends: ", pendingFriends);
+                //     // console.log("acceptedFriends: ", acceptedFriends);
+
+                //     setPendingFriends(pendingFriends);
+                //     setAcceptedFriends(acceptedFriends);
+                // }
+
+                // filterFriends(allFriends);
             });
     }, []);
 
@@ -95,7 +115,6 @@ const FriendsList = () => {
             </h4>
         </>
     );
-
 };
 
 export default FriendsList;

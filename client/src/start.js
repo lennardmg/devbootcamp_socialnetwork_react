@@ -3,17 +3,20 @@ import Welcome from "./components/Welcome/welcome.jsx";
 import App from "./components/App/app.jsx";
 import { BrowserRouter } from "react-router-dom";
 
-// import { createRoot } from "react-dom/client";
 import { Provider } from "react-redux";
-import store from "./Redux/store.js";
+import rootReducer from "./Redux/root.reducer.js";
+import { createStore, applyMiddleware } from "redux";
+import * as immutableState from "redux-immutable-state-invariant";
+import { composeWithDevTools } from "redux-devtools-extension";
 
-// const root = createRoot(document.getElementById("root"));
-
+const store = createStore(
+    rootReducer,
+    composeWithDevTools(applyMiddleware(immutableState.default()))
+);
 
 fetch("/user/id")
     .then((response) => response.json())
     .then((data) => {
-
         // console.log("data in fetch at start.js: ", data);
 
         if (!data.userId) {
@@ -27,9 +30,9 @@ fetch("/user/id")
             ReactDOM.render(
                 <Provider store={store}>
                     <BrowserRouter>
-                
                         <App />
-                    </BrowserRouter>,
+                    </BrowserRouter>
+                    ,
                 </Provider>,
                 document.querySelector("main")
             );
