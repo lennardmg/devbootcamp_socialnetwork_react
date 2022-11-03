@@ -18,6 +18,7 @@ export default function friendsReducer(friends = [], action) {
 
 // ACTIONS:
 export function setFriendsAction(friends) {
+
     return {
         type: "friends/received",
         payload: { friends },

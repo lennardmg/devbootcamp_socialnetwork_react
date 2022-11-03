@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 
 const FriendshipButton = ({friendsid}) => {
-    // const [status, setStatus] = useState([]);
     const [buttontext, setButtontext] = useState("");
 
     const id = friendsid || (useParams()).id;

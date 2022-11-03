@@ -497,8 +497,8 @@ app.get("/showFriends", (req, res) => {
 
     showFriends(req.session.userId)
         .then((friends) => {
-            console.log("I got your friends from DB");
-            console.log("friends: ", friends);
+            // console.log("I got your friends from DB");
+            // console.log("friends: ", friends);
 
             res.json({
                 success: true,

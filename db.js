@@ -179,7 +179,7 @@ module.exports.updateBio = function (id, bio) {
 
 module.exports.showFriends = function (id) {
     const sql = `
-SELECT users.id, first_name, last_name, accepted, profile_pic_url, friendships.id FROM users
+SELECT users.id, first_name, last_name, accepted, profile_pic_url FROM users
 JOIN friendships
 ON (accepted = true AND recipient_id = $1 AND users.id = friendships.sender_id)
 OR (accepted = true AND sender_id = $1 AND users.id = friendships.recipient_id)

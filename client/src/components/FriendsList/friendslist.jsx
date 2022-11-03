@@ -69,19 +69,26 @@ const FriendsList = () => {
                 <h2> People waiting for your acceptance: </h2>
                 <ul className="userResultTable">
                     {pendingFriends.map((pendingFriend) => (
-                        <li key={pendingFriend.id} className="userCard">
+                        <li
+                            key={pendingFriend.id}
+                            className="userCard"
+                        >
                             <img
                                 src={pendingFriend.profile_pic_url}
                                 alt="Profile Pic"
                                 style={{ height: "100px", width: "100px" }}
-                                onClick={() => openProfile(pendingFriend.id)}
+                                onClick={() =>
+                                    openProfile(pendingFriend.id)
+                                }
                             />
                             <p>
                                 {pendingFriend.first_name}{" "}
                                 {pendingFriend.last_name}
                                 {pendingFriend.accepted}
                             </p>
-                            <FriendshipButton friendsid={pendingFriend.id} />
+                            <FriendshipButton
+                                friendsid={pendingFriend.id}
+                            />
                         </li>
                     ))}
                 </ul>
