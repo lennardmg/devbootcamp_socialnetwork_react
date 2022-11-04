@@ -8,6 +8,8 @@ import FindPeople from "../SearchInput/findpeople.jsx";
 import LogOut from "../Login/logout.jsx";
 import OtherProfile from "../OtherProfile/otherprofile.jsx";
 import FriendsList from "../FriendsList/friendslist.jsx";
+import { Link } from "react-router-dom";
+import Chat from "../Chat/chat.jsx";
 
 
 export default class App extends Component {
@@ -84,6 +86,13 @@ export default class App extends Component {
                         <h1>Welcome to Snack-Lovers!</h1>
                     </div>
 
+                    <div className="linkHeader">
+                        <Link to="/profile"> Your profile </Link>
+                        <Link to="/friends"> See your list of friends </Link>
+                        <Link to="/users"> Search for users </Link>
+                        <Link to="/chat"> Chat with other users </Link>
+                    </div>
+
                     <div className="rightHeaderFlex">
                         <LogOut />
                         <ProfilePic
@@ -125,6 +134,10 @@ export default class App extends Component {
 
                 <Route path="/friends">
                     <FriendsList />
+                </Route>
+
+                <Route path="/chat">
+                    <Chat />
                 </Route>
 
                 <hr />

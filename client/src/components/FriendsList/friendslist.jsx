@@ -1,6 +1,5 @@
 import { useEffect } from "react";
 import FriendshipButton from "../FriendshipButton/friendshipbutton.jsx";
-import { Link } from "react-router-dom";
 import { useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { setFriendsAction } from "../../Redux/friends.slice.js";
@@ -66,29 +65,37 @@ const FriendsList = () => {
     return (
         <>
             <div>
+                <br />
                 <h2> People waiting for your acceptance: </h2>
+
+                {pendingFriends.length == 0 && (
+                    <>
+                        <br />
+                        <h4 style={{ fontStyle: "italic" }}>
+                            {" "}
+                            Nothing to display here{" "}
+                        </h4>
+                        <br />
+                        <br />
+                        <br />
+                    </>
+                )}
+
                 <ul className="userResultTable">
                     {pendingFriends.map((pendingFriend) => (
-                        <li
-                            key={pendingFriend.id}
-                            className="userCard"
-                        >
+                        <li key={pendingFriend.id} className="userCard">
                             <img
                                 src={pendingFriend.profile_pic_url}
                                 alt="Profile Pic"
                                 style={{ height: "100px", width: "100px" }}
-                                onClick={() =>
-                                    openProfile(pendingFriend.id)
-                                }
+                                onClick={() => openProfile(pendingFriend.id)}
                             />
                             <p>
                                 {pendingFriend.first_name}{" "}
                                 {pendingFriend.last_name}
                                 {pendingFriend.accepted}
                             </p>
-                            <FriendshipButton
-                                friendsid={pendingFriend.id}
-                            />
+                            <FriendshipButton friendsid={pendingFriend.id} />
                         </li>
                     ))}
                 </ul>
@@ -96,6 +103,19 @@ const FriendsList = () => {
 
             <div>
                 <h2> Your friends: </h2>
+
+                {acceptedFriends.length == 0 && (
+                    <>
+                        <br />
+                        <h4 style={{ fontStyle: "italic" }}>
+                            No friends to display. Reach out to some people!
+                        </h4>
+                        <br />
+                        <br />
+                        <br />
+                    </>
+                )}
+
                 <ul className="userResultTable">
                     {acceptedFriends.map((acceptedFriend) => (
                         <li key={acceptedFriend.id} className="userCard">
@@ -115,11 +135,6 @@ const FriendsList = () => {
                     ))}
                 </ul>
             </div>
-
-            <h4>
-                <Link to="/users"> Search for users </Link> &nbsp; &nbsp; &nbsp;
-                <Link to="/profile"> Your profile </Link>
-            </h4>
         </>
     );
 };

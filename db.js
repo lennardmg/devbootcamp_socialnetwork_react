@@ -190,3 +190,27 @@ OR (accepted = false AND recipient_id = $1 AND users.id = friendships.sender_id)
         .then((result) => result.rows);
 };
 
+////////////////// Global Chat: ////////////////////////////
+
+module.exports.getLastMessages = (limit = 10) => {
+    const sql = `
+SELECT users.id, messages.id AS messagesId, first_name, last_name, profile_pic_url, message, messages.created_at 
+FROM users JOIN messages
+ON users.id = messages.sender_id
+ORDER BY messages.created_at DESC
+LIMIT $1
+`;
+    return db.query(sql, [limit])
+        .then((result) => result.rows);
+};
+
+
+module.exports.insertMessage = (sender_id, message) => {
+    const sql = `
+   INSERT INTO messages (sender_id, message)
+    VALUES ($1, $2) 
+    RETURNING *
+`;
+    return db.query(sql, [sender_id, message])
+        .then((result) => result.rows);
+};

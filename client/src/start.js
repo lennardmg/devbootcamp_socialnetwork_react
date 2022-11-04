@@ -9,6 +9,8 @@ import { createStore, applyMiddleware } from "redux";
 import * as immutableState from "redux-immutable-state-invariant";
 import { composeWithDevTools } from "redux-devtools-extension";
 
+import { initSocket } from "./socket.js";
+
 const store = createStore(
     rootReducer,
     composeWithDevTools(applyMiddleware(immutableState.default()))
@@ -27,12 +29,15 @@ fetch("/user/id")
                 document.querySelector("main")
             );
         } else {
+
+            // set up socket .. !
+            initSocket(store);
+
             ReactDOM.render(
                 <Provider store={store}>
                     <BrowserRouter>
                         <App />
-                    </BrowserRouter>
-                    ,
+                    </BrowserRouter>,
                 </Provider>,
                 document.querySelector("main")
             );

@@ -10,15 +10,18 @@ app.use(compression());
 const cryptoRandomString = require("crypto-random-string");
 const s3 = require("../s3");
 
+
+
 app.use(express.static(path.join(__dirname, "..", "client", "public")));
 
-app.use(
-    cookieSession({
-        secret: process.env.SESSION_SECRET,
-        maxAge: 1000 * 60 * 60 * 24 * 14,
-        sameSite: true,
-    })
-);
+const cookieSessionMiddleware = cookieSession({
+    secret: process.env.SESSION_SECRET,
+    maxAge: 1000 * 60 * 60 * 24 * 14,
+    sameSite: true,
+});
+
+app.use(cookieSessionMiddleware);
+
 
 const {
     insertUser,
@@ -34,7 +37,9 @@ const {
     acceptFriendship,
     updateProfilePic,
     updateBio,
-    showFriends
+    showFriends,
+    getLastMessages,
+    insertMessage,
 } = require("../db.js");
 
 const { authenticate, uploader } = require("../functions.js");
@@ -48,6 +53,79 @@ app.use((req, res, next) => {
     console.log("---------------------");
     next();
 });
+
+////////////// socket stuff: /////////////
+
+const server = require("http").Server(app);
+
+const io = require("socket.io")(server, {
+    allowRequest: (req, callback) => {
+        callback(null, req.headers.referer.startsWith("http://localhost:3000"));
+    }
+});
+
+io.use ((socket, next) => {
+
+    cookieSessionMiddleware(socket.request, socket.request.res, next);
+
+});
+
+io.on("connection", async (socket) => {
+    const userId = socket.request.session.userId;
+
+    if (!userId) {
+        return socket.disconnect(true);
+    }
+
+    // 1) send them the latest messages
+    const latestMessages = await getLastMessages();
+    socket.emit("chatMessages", latestMessages);
+    
+    // 2) listen for a "chatMessage" event
+    // created when this socket sends a message
+    socket.on("chatMessage", (text) => {
+
+        // 1. store the message in the database
+        insertMessage(userId, text)
+            .then((data) => {
+                
+                console.log("data in insertMessage: ", data);
+
+                let created_at = data[0].created_at;
+                let messagesid = data[0].id;
+
+                getUserInfo(userId)
+                    .then((userData) => {
+        
+                        console.log("userData in getUserInfo: ", userData);
+
+                        let userWhoSentMessage = {
+                            message: text,
+                            first_name: userData[0].first_name,
+                            last_name: userData[0].last_name,
+                            profile_pic_url: userData[0].profile_pic_url,
+                            messagesid,
+                            created_at,
+                            
+                        };
+
+                        io.emit("chatMessage", userWhoSentMessage);
+                    })
+                    .catch((error) => {
+                        console.log("error in getUserInfo @socket on connection: ", error);
+                    });
+            })
+            .catch((error) => {
+                console.log("error in insertMessage @socket on connection: ", error);
+            });
+
+
+        // 2. broadcast the message to ALL connected sockets!
+        // include all relevant info (user's names, profile_pic_url, etc.)
+    });
+
+});
+
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -516,6 +594,8 @@ app.get("*", function (req, res) {
     res.sendFile(path.join(__dirname, "..", "client", "index.html"));
 });
 
-app.listen(process.env.PORT || 3001, function () {
+
+// because of socket.io, its not called app.listen, but:
+server.listen(process.env.PORT || 3001, function () {
     console.log("I'm listening.");
 });

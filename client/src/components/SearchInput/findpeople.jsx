@@ -1,9 +1,7 @@
 import FindPeopleResultList from "./findpeopleresultlist.jsx";
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
 
 const FindPeople = () => {
-    const [findUser, setFindUser] = useState("");
     const [users, setUsers] = useState([]);
     const [isSearching, setIsSearching] = useState(false);
 
@@ -48,8 +46,6 @@ const FindPeople = () => {
                 setUsers(data.foundUsers);
 
             });
-
-
     };
 
     return (
@@ -97,11 +93,6 @@ const FindPeople = () => {
                     <br />
                 </>
             )}
-
-            <h4>
-                <Link to="/profile"> Your profile </Link> &nbsp; &nbsp; &nbsp;
-                <Link to="/friends"> See your list of friends </Link>
-            </h4>
         </>
     );
 };
