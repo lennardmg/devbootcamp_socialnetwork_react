@@ -1,5 +1,6 @@
 import BioEditor from "./bioeditor.jsx";
 import ProfilePic from "./profilepic.jsx";
+import DeleteUser from "../Login/deleteuser.jsx";
 
 export default function Profile(props) {
 
@@ -15,6 +16,7 @@ export default function Profile(props) {
                         profile_pic_url={props.profile_pic_url}
                         togglePopup={props.togglePopup}
                     />
+                    <DeleteUser />
                 </div>
 
                 <div className="rightProfilePart">

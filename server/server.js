@@ -10,7 +10,7 @@ app.use(compression());
 const cryptoRandomString = require("crypto-random-string");
 const s3 = require("../s3");
 
-
+// for changing the date format with date FNS JS:
 
 app.use(express.static(path.join(__dirname, "..", "client", "public")));
 
@@ -40,6 +40,7 @@ const {
     showFriends,
     getLastMessages,
     insertMessage,
+    deleteUser
 } = require("../db.js");
 
 const { authenticate, uploader } = require("../functions.js");
@@ -79,7 +80,10 @@ io.on("connection", async (socket) => {
 
     // 1) send them the latest messages
     const latestMessages = await getLastMessages();
-    socket.emit("chatMessages", latestMessages);
+
+    console.log("latestMessages on server side: ", latestMessages);
+
+    socket.emit("chatMessages", latestMessages.reverse());
     
     // 2) listen for a "chatMessage" event
     // created when this socket sends a message
@@ -93,11 +97,11 @@ io.on("connection", async (socket) => {
 
                 let created_at = data[0].created_at;
                 let messagesid = data[0].id;
+     
+                // created_at = created_at.toString().split(" GMT")[0];
 
                 getUserInfo(userId)
                     .then((userData) => {
-        
-                        console.log("userData in getUserInfo: ", userData);
 
                         let userWhoSentMessage = {
                             message: text,
@@ -183,7 +187,7 @@ app.post("/registration", (req, res) => {
 });
 
 app.post("/login", (req, res) => {
-    console.log("req.body in post /login: ", req.body);
+    // console.log("req.body in post /login: ", req.body);
 
     const email = req.body.email;
     const password = req.body.password;
@@ -328,7 +332,7 @@ app.get("/getInfoAboutSignedInUser", (req, res) => {
             const userInfo = user[0];
 
             // console.log("user in getUserInfo: ", user);
-            console.log("userInfo in getUserInfo: ", userInfo);
+            // console.log("userInfo in getUserInfo: ", userInfo);
 
             res.json({
                 success: true,
@@ -406,7 +410,7 @@ app.get("/searchUsers", (req, res) => {
         });
 });
 
-//////////////////////////////// LogOut ///////////////////////////////////////
+//////////////////////////////// LogOut & Deletion ///////////////////////////////////////
 
 app.get("/logout", (req, res) => {
     req.session = null;
@@ -415,14 +419,26 @@ app.get("/logout", (req, res) => {
     });
 });
 
+app.get("/deleteuser", (req, res) => {
+
+    deleteUser(req.session.userId)
+        .then(() => {
+
+            req.session = null;
+            res.json({
+                success: true,
+            });
+        });
+});
+
 //////////////////////// Part 7, other profiles //////////////////////////////////
 
 app.get("/user/:id", function (req, res) {
     let chosenUserId = req.params.id;
     // console.log(req.params, "req. params in get/user/:id");
-    console.log("chosenUserId: ", chosenUserId);
-    console.log("req.session.userId: ", req.session.userId);
-    console.log("typeof chosenUserId: ", typeof chosenUserId);
+    // console.log("chosenUserId: ", chosenUserId);
+    // console.log("req.session.userId: ", req.session.userId);
+    // console.log("typeof chosenUserId: ", typeof chosenUserId);
 
     if (chosenUserId == req.session.userId) {
         res.json({

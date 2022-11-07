@@ -2,7 +2,7 @@ DROP TABLE IF EXISTS messages CASCADE;
 
 CREATE TABLE messages (
     id SERIAL PRIMARY KEY,
-    sender_id INTEGER NOT NULL REFERENCES users(id),
+    sender_id INTEGER NOT NULL REFERENCES users(id) ON delete CASCADE,
     recipient_id INTEGER,
     message TEXT,
     created_at TIMESTAMP DEFAULT current_timestamp

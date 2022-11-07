@@ -214,3 +214,14 @@ module.exports.insertMessage = (sender_id, message) => {
     return db.query(sql, [sender_id, message])
         .then((result) => result.rows);
 };
+
+module.exports.deleteUser = (id) => {
+    const sql = `
+  DELETE FROM users
+  WHERE id = $1 
+`;
+    return db
+        .query(sql, [id])
+        .then((result) => result.rows)
+        .catch((error) => console.log("error in deleteUser function", error));
+};
