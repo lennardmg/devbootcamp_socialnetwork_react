@@ -45,15 +45,15 @@ const {
 
 const { authenticate, uploader } = require("../functions.js");
 
-app.use((req, res, next) => {
-    console.log("---------------------");
-    console.log("req.url:", req.url);
-    console.log("req.method:", req.method);
-    console.log("logged-in user, req.session.userId:", req.session.userId);
-    console.log("req.body:", req.body);
-    console.log("---------------------");
-    next();
-});
+// app.use((req, res, next) => {
+//     console.log("---------------------");
+//     console.log("req.url:", req.url);
+//     console.log("req.method:", req.method);
+//     console.log("logged-in user, req.session.userId:", req.session.userId);
+//     console.log("req.body:", req.body);
+//     console.log("---------------------");
+//     next();
+// });
 
 ////////////// socket stuff: /////////////
 
@@ -81,8 +81,6 @@ io.on("connection", async (socket) => {
     // 1) send them the latest messages
     const latestMessages = await getLastMessages();
 
-    console.log("latestMessages on server side: ", latestMessages);
-
     socket.emit("chatMessages", latestMessages.reverse());
     
     // 2) listen for a "chatMessage" event
@@ -93,7 +91,7 @@ io.on("connection", async (socket) => {
         insertMessage(userId, text)
             .then((data) => {
                 
-                console.log("data in insertMessage: ", data);
+                // console.log("data in insertMessage: ", data);
 
                 let created_at = data[0].created_at;
                 let messagesid = data[0].id;
@@ -194,7 +192,9 @@ app.post("/login", (req, res) => {
 
     findUserByEmail(email)
         .then((user) => {
+
             if (!user.length) {
+
                 res.json({
                     success: false,
                     message: "Sorry, something went wrong...",
@@ -203,7 +203,7 @@ app.post("/login", (req, res) => {
             }
 
             const userInfo = user[0];
-            console.log("user data: ", user);
+            // console.log("user data: ", user);
 
             authenticate(password, user[0].password)
                 .then((result) => {
@@ -396,10 +396,13 @@ app.get("/getUsersWhoRecentlyJoined", (req, res) => {
 });
 
 app.get("/searchUsers", (req, res) => {
-    console.log("req.query in /searchUsers: ", req.query);
+    // console.log("req.query in /searchUsers: ", req.query);
 
     searchUsers(req.query.q)
         .then((foundUsers) => {
+
+            // console.log("foundUsers is get /searchUsers: ", foundUsers);
+
             res.json({
                 success: true,
                 foundUsers: foundUsers,

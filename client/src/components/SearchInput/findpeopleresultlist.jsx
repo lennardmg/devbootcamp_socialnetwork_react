@@ -1,4 +1,5 @@
 import { useHistory } from "react-router-dom";
+import { parseISO, formatDistanceToNow } from "date-fns";
 
 
 const FindPeopleResultList = ({ users }) => {
@@ -24,7 +25,15 @@ const FindPeopleResultList = ({ users }) => {
                         style={{ height: "100px", width: "100px" }}
                     />
                     <p>
-                        {user.first_name} {user.last_name}
+                        {user.first_name} {user.last_name} &nbsp;
+                        <span style={{ fontSize: "15px" }}>
+                            {" "}
+                            <i>
+                                joined{" "}
+                                {formatDistanceToNow(parseISO(user.created_at))}{" "}
+                                ago
+                            </i>
+                        </span>
                     </p>
                 </li>
             ))}

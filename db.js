@@ -3,9 +3,6 @@ const spicedPg = require("spiced-pg");
 const DATABASE_URL = process.env.DATABASE_URL;
 const db = spicedPg(DATABASE_URL);
 
-
-
-
 module.exports.insertUser = function (first_name, last_name, email, password) {
     const sql = `
         INSERT INTO users (first_name, last_name, email, password)
@@ -18,18 +15,14 @@ module.exports.insertUser = function (first_name, last_name, email, password) {
         .catch((error) => console.log("error in insertUser function", error));
 };
 
-
 module.exports.findUserByEmail = function (email) {
     const sql = `
         SELECT id, email, password, first_name, last_name, code FROM users WHERE email= $1;
     `;
-    return db
-        .query(sql, [email])
-        .then((result) => {
-            return result.rows;
-        });
+    return db.query(sql, [email]).then((result) => {
+        return result.rows;
+    });
 };
-
 
 module.exports.getUserInfo = function (id) {
     const sql = `
@@ -39,7 +32,6 @@ module.exports.getUserInfo = function (id) {
         return result.rows;
     });
 };
-
 
 module.exports.getUsersWhoRecentlyJoined = function () {
     const sql = `
@@ -54,16 +46,13 @@ module.exports.getUsersWhoRecentlyJoined = function () {
 
 module.exports.searchUsers = function (searchInput) {
     const sql = `
-        SELECT id, first_name, last_name, profile_pic_url FROM users 
+        SELECT id, first_name, last_name, profile_pic_url, created_at FROM users 
         WHERE first_name ILIKE $1;
     `;
     return db.query(sql, [searchInput + "%"]).then((result) => {
         return result.rows;
     });
 };
-
-
-
 
 module.exports.storePwResetCode = function (email, code) {
     const sql = `
@@ -78,7 +67,6 @@ module.exports.storePwResetCode = function (email, code) {
         );
 };
 
-
 module.exports.resetPassword = function (email, password) {
     const sql = `
     UPDATE users SET password = $2
@@ -92,8 +80,6 @@ module.exports.resetPassword = function (email, password) {
         );
 };
 
-
-
 // 1) getFriendship
 // whenever visiting somebodys profile
 // find a friendship between
@@ -104,13 +90,11 @@ module.exports.getFriendship = function (user1, user2) {
         WHERE (sender_id = $1 AND recipient_id = $2)
         OR (sender_id = $2 AND recipient_id = $1);
     `;
-    return db
-        .query(sql, [user1, user2])
-        .then((result) => result.rows);
+    return db.query(sql, [user1, user2]).then((result) => result.rows);
 };
 
 // 2) insertFriendship
-// once the button is clicked, creates an unaccepted friendship, boolean = false 
+// once the button is clicked, creates an unaccepted friendship, boolean = false
 
 module.exports.insertFriendship = function (user1, user2) {
     const sql = `
@@ -118,9 +102,7 @@ module.exports.insertFriendship = function (user1, user2) {
     VALUES ($1, $2) 
     RETURNING *
     `;
-    return db
-        .query(sql, [user1, user2])
-        .then((result) => result.rows);
+    return db.query(sql, [user1, user2]).then((result) => result.rows);
 };
 
 // 3) deleteFriendship
@@ -132,9 +114,7 @@ module.exports.deleteFriendship = function (user1, user2) {
     WHERE (sender_id = $1 AND recipient_id = $2)
     OR (sender_id = $2 AND recipient_id = $1);
     `;
-    return db
-        .query(sql, [user1, user2])
-        .then((result) => result.rows);
+    return db.query(sql, [user1, user2]).then((result) => result.rows);
 };
 
 // 4) acceptFriendship
@@ -147,11 +127,8 @@ module.exports.acceptFriendship = function (user1, user2) {
     WHERE (sender_id = $1 AND recipient_id = $2)
     OR (sender_id = $2 AND recipient_id = $1);
     `;
-    return db
-        .query(sql, [user1, user2])
-        .then((result) => result.rows);
+    return db.query(sql, [user1, user2]).then((result) => result.rows);
 };
-
 
 module.exports.updateProfilePic = function (id, url) {
     const sql = `
@@ -171,11 +148,8 @@ module.exports.updateBio = function (id, bio) {
     UPDATE users SET bio = $2
     WHERE id = $1;
     `;
-    return db
-        .query(sql, [id, bio])
-        .then((result) => result.rows);
+    return db.query(sql, [id, bio]).then((result) => result.rows);
 };
-
 
 module.exports.showFriends = function (id) {
     const sql = `
@@ -185,9 +159,7 @@ ON (accepted = true AND recipient_id = $1 AND users.id = friendships.sender_id)
 OR (accepted = true AND sender_id = $1 AND users.id = friendships.recipient_id)
 OR (accepted = false AND recipient_id = $1 AND users.id = friendships.sender_id)
     `;
-    return db
-        .query(sql, [id])
-        .then((result) => result.rows);
+    return db.query(sql, [id]).then((result) => result.rows);
 };
 
 ////////////////// Global Chat: ////////////////////////////
@@ -200,10 +172,8 @@ ON users.id = messages.sender_id
 ORDER BY messages.created_at DESC
 LIMIT $1
 `;
-    return db.query(sql, [limit])
-        .then((result) => result.rows);
+    return db.query(sql, [limit]).then((result) => result.rows);
 };
-
 
 module.exports.insertMessage = (sender_id, message) => {
     const sql = `
@@ -211,14 +181,13 @@ module.exports.insertMessage = (sender_id, message) => {
     VALUES ($1, $2) 
     RETURNING *
 `;
-    return db.query(sql, [sender_id, message])
-        .then((result) => result.rows);
+    return db.query(sql, [sender_id, message]).then((result) => result.rows);
 };
 
 module.exports.deleteUser = (id) => {
     const sql = `
   DELETE FROM users
-  WHERE id = $1 
+  WHERE id = $1;
 `;
     return db
         .query(sql, [id])

@@ -38,10 +38,10 @@ const FindPeople = () => {
         })
             .then((res) => res.json())
             .then((data) => {
-                console.log(
-                    "data received from server in getUsers from findpeople: ",
-                    data
-                );
+                // console.log(
+                //     "data received from server in getUsers from findpeople: ",
+                //     data
+                // );
 
                 setUsers(data.foundUsers);
 
@@ -51,11 +51,27 @@ const FindPeople = () => {
     return (
         <>
             <h1>Find People</h1>
+
+            <>
+                <h3>
+                    Are you looking for someone in particular? 🍬
+                    <br />
+                    <input
+                        type="text"
+                        placeholder="Enter name"
+                        onChange={(e) => {
+                            getUsers(e.target.value);
+                        }}
+                    ></input>
+                </h3>
+                <br />
+            </>
+
             {isSearching == false && (
-                <h2>Check out which new Snack-Lovers recently joined:</h2>
+                <h2> 🍟 Check out which new Snack-Lovers recently joined:</h2>
             )}
 
-            {isSearching == true && (
+            {/* {isSearching == true && (
                 <>
                     <h3>
                         Find other Snack-Lovers here <br />
@@ -69,7 +85,7 @@ const FindPeople = () => {
                     </h3>
                     <br />
                 </>
-            )}
+            )} */}
 
             <br />
 
@@ -77,22 +93,6 @@ const FindPeople = () => {
                 <span style={{ fontStyle: "italic" }}> No user found </span>
             )}
             {users.length > 0 && <FindPeopleResultList users={users} />}
-
-            {isSearching == false && (
-                <>
-                    <h3>
-                        Are you looking for someone in particular? <br />
-                        <input
-                            type="text"
-                            placeholder="Enter name"
-                            onChange={(e) => {
-                                getUsers(e.target.value);
-                            }}
-                        ></input>
-                    </h3>
-                    <br />
-                </>
-            )}
         </>
     );
 };

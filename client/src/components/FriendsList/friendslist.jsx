@@ -66,7 +66,7 @@ const FriendsList = () => {
         <>
             <div>
                 <br />
-                <h2> People waiting for your acceptance: </h2>
+                <h2> 🧁 People waiting for your acceptance: </h2>
 
                 {pendingFriends.length == 0 && (
                     <>
@@ -102,7 +102,7 @@ const FriendsList = () => {
             </div>
 
             <div>
-                <h2> Your friends: </h2>
+                <h2> 🥞 Your friends: </h2>
 
                 {acceptedFriends.length == 0 && (
                     <>

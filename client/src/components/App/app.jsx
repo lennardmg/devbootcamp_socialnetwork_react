@@ -83,7 +83,7 @@ export default class App extends Component {
                 <div className="appHeader">
                     <div className="leftHeaderFlex">
                         <Logo />
-                        <h1>Welcome to Snack-Lovers!</h1>
+                        <h1>Welcome to Snack-Lovers! 🍩</h1>
                     </div>
 
                     <div className="linkHeader">
@@ -95,12 +95,20 @@ export default class App extends Component {
 
                     <div className="rightHeaderFlex">
                         <LogOut />
-                        <ProfilePic
-                            profile_pic_url={this.state.profile_pic_url}
-                            togglePopup={this.togglePopup}
-                            first_name={this.state.first_name}
-                            last_name={this.state.last_name}
-                        />
+                        <div
+                            style={{
+                                height: "100px",
+                                width: "100px",
+                                marginRight: "20px",
+                            }}
+                        >
+                            <ProfilePic
+                                profile_pic_url={this.state.profile_pic_url}
+                                togglePopup={this.togglePopup}
+                                first_name={this.state.first_name}
+                                last_name={this.state.last_name}
+                            />
+                        </div>
                     </div>
                     {this.state.openPopup && (
                         <Uploader
@@ -112,33 +120,34 @@ export default class App extends Component {
                 </div>
 
                 <hr />
+                <div className="mainBody">
+                    <Route path="/profile">
+                        <Profile
+                            profile_pic_url={this.state.profile_pic_url}
+                            togglePopup={this.togglePopup}
+                            first_name={this.state.first_name}
+                            last_name={this.state.last_name}
+                            bio={this.state.bio}
+                            updateBio={this.updateBio}
+                        />
+                    </Route>
 
-                <Route path="/profile">
-                    <Profile
-                        profile_pic_url={this.state.profile_pic_url}
-                        togglePopup={this.togglePopup}
-                        first_name={this.state.first_name}
-                        last_name={this.state.last_name}
-                        bio={this.state.bio}
-                        updateBio={this.updateBio}
-                    />
-                </Route>
+                    <Route exact path="/users">
+                        <FindPeople />
+                    </Route>
 
-                <Route exact path="/users">
-                    <FindPeople />
-                </Route>
+                    <Route path="/users/:id">
+                        <OtherProfile />
+                    </Route>
 
-                <Route path="/users/:id">
-                    <OtherProfile />
-                </Route>
+                    <Route path="/friends">
+                        <FriendsList />
+                    </Route>
 
-                <Route path="/friends">
-                    <FriendsList />
-                </Route>
-
-                <Route path="/chat">
-                    <Chat />
-                </Route>
+                    <Route path="/chat">
+                        <Chat />
+                    </Route>
+                </div>
 
                 <hr />
             </>

@@ -10,12 +10,20 @@ export default function Profile(props) {
         <>
             <div className="profile">
                 <div className="leftProfilePart">
-                    <ProfilePic
-                        first_name={props.first_name}
-                        last_name={props.last_name}
-                        profile_pic_url={props.profile_pic_url}
-                        togglePopup={props.togglePopup}
-                    />
+                    <div
+                        style={{
+                            height: "300px",
+                            width: "300px",
+                            objectFit: "cover",
+                        }}
+                    >
+                        <ProfilePic
+                            first_name={props.first_name}
+                            last_name={props.last_name}
+                            profile_pic_url={props.profile_pic_url}
+                            togglePopup={props.togglePopup}
+                        />
+                    </div>
                     <DeleteUser />
                 </div>
 

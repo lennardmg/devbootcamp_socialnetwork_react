@@ -12,6 +12,15 @@ h1, h2, h3, h4 {
     margin: 5px;
 }
 
+.mainBody {
+    background-image: url('./public/mae-mu-Rz5o0osnN6Q-unsplash.jpg');
+    min-height: 100vh;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: scroll;
+    background-size:cover;
+}
+
 .inputFlex {
     display: flex;
     flex-direction: row;
@@ -130,6 +139,7 @@ h1, h2, h3, h4 {
     cursor: pointer;
     margin-bottom: 2px;
     border-radius: 5px;
+    max-height: 25px;
 }
 
 .leftHeaderFlex {

@@ -3,7 +3,6 @@ import { Link, withRouter } from "react-router-dom";
 // import { BrowserRouter, Route } from "react-router-dom";
 
 class Login extends React.Component {
-
     constructor() {
         super();
         this.state = {
@@ -24,7 +23,10 @@ class Login extends React.Component {
             this.setState({
                 message: "*Please enter an email adress",
             });
-        } else if (this.state.password == undefined || this.state.password == "") {
+        } else if (
+            this.state.password == undefined ||
+            this.state.password == ""
+        ) {
             this.setState({
                 message: "*Please enter a password",
             });
@@ -45,24 +47,24 @@ class Login extends React.Component {
                 .then((data) => {
                     // console.log("data received from server: ", data);
 
-                    this.setState({
-                        message: data.message,
-                    });
-
-                    this.props.history.push("/profile");
-                    location.reload();
+                    if (data.success) {
+                        this.props.history.push("/profile");
+                        location.reload();
+                    } else {
+                        this.setState({
+                            message: data.message,
+                        });
+                    }
                 });
         }
     }
 
     handleChange(event) {
-
         const targetName = event.target.name;
-     
-        this.setState(
-            {
-                [targetName]: event.target.value,
-            });
+
+        this.setState({
+            [targetName]: event.target.value,
+        });
     }
 
     render() {
@@ -71,11 +73,10 @@ class Login extends React.Component {
                 <h2> Please Log-in </h2>
                 <div className="inputFlex">
                     <form action="" className="inputForm">
-
                         <span style={{ color: "red" }}>
                             {this.state.message}
                         </span>
-                        
+
                         <div>
                             <label htmlFor="email" className="">
                                 Email

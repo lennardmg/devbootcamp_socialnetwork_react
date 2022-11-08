@@ -24,33 +24,37 @@ class Registration extends React.Component {
     submitForm(e) {
         e.preventDefault();
 
-        if (this.state.email == undefined || this.state.email == "") {
+        if (
+            this.state.email == undefined ||
+            this.state.email.trim() == "" ||
+            !this.state.email.includes("@") ||
+            !this.state.email.includes(".")
+        ) {
             this.setState({
                 message: "*Please enter an email adress",
             });
         } else if (
             this.state.password == undefined ||
-            this.state.password == ""
+            this.state.password.trim() == ""
         ) {
             this.setState({
                 message: "*Please enter a password",
             });
         } else if (
             this.state.firstname == undefined ||
-            this.state.firstname == ""
+            this.state.firstname.trim() == ""
         ) {
             this.setState({
                 message: "*Please enter a first name",
             });
         } else if (
             this.state.lastname == undefined ||
-            this.state.lastname == ""
+            this.state.lastname.trim() == ""
         ) {
             this.setState({
                 message: "*Please enter a last name",
             });
         } else {
-
             const newUser = {
                 email: this.state.email,
                 password: this.state.password,
@@ -67,7 +71,6 @@ class Registration extends React.Component {
             })
                 .then((res) => res.json())
                 .then(() => {
-
                     // console.log("data received from server: ", data);
 
                     this.props.history.push("/profile");
@@ -83,8 +86,9 @@ class Registration extends React.Component {
 
                 <div className="inputFlex">
                     <form action="" className="inputForm">
-
-                        <span style={{ color: "red" }}>{this.state.message}</span>
+                        <span style={{ color: "red" }}>
+                            {this.state.message}
+                        </span>
 
                         <div>
                             <label htmlFor="firstname" className="">
@@ -92,6 +96,7 @@ class Registration extends React.Component {
                             </label>
                             <input
                                 type="text"
+                                pattern="[\p{Letter}\-' ßñÄÖÜäüöæÆÅåØø]+"
                                 name="firstname"
                                 id="firstname"
                                 onChange={this.handleChange}
@@ -104,6 +109,7 @@ class Registration extends React.Component {
                             </label>
                             <input
                                 type="text"
+                                pattern="[\p{Letter}\-' ßñÄÖÜäüöæÆÅåØø]+"
                                 name="lastname"
                                 id="lastname"
                                 onChange={this.handleChange}
@@ -116,6 +122,7 @@ class Registration extends React.Component {
                             </label>
                             <input
                                 type="email"
+                                pattern="[A-Za-z0-9._%+-ßöäü]+@[a-z0-9.-ßöäü]+\.[a-z]{2,}$"
                                 name="email"
                                 id="email"
                                 onChange={this.handleChange}
@@ -142,7 +149,6 @@ class Registration extends React.Component {
 
                         <p>
                             Already signed-in? Log-in &nbsp;
-                            {/* <a href="#"> HERE </a> */}
                             <Link to="/login">HERE </Link>
                         </p>
                     </form>

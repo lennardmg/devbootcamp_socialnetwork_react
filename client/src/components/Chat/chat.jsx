@@ -47,7 +47,13 @@ export default function Chat() {
                                     <strong>{message.first_name}</strong> &nbsp;
                                     <strong>{message.last_name}</strong> &nbsp;
                                     said &nbsp;
-                                    <i>{formatDistanceToNow(parseISO(message.created_at))} ago</i>: <br /> <br />
+                                    <i>
+                                        {formatDistanceToNow(
+                                            parseISO(message.created_at)
+                                        )}{" "}
+                                        ago
+                                    </i>
+                                    : <br /> <br />
                                     <span className="chatText">
                                         {message.message}
                                     </span>
@@ -67,6 +73,7 @@ export default function Chat() {
                     // onChange={(e) => onChatChange(e)}
                     placeholder="Type here"
                 ></textarea>
+                🍫
             </div>
         </>
     );
